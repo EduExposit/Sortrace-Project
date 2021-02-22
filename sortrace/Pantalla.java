@@ -6,8 +6,13 @@
 package sortrace;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
@@ -17,6 +22,7 @@ import sortrace.algoritmos.*;
 import sortrace.auxiliar.TeoriaAlgoritmo;
 import sortrace.auxiliar.Vector;
 import sortrace.vistas.VistaVector;
+import util.Configuracion.Configuracion;
 import util.ayuda.IU_Ayuda;
 import util.filtros.FiltroTxt;
 
@@ -43,8 +49,8 @@ public class Pantalla extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        UIManager.put("TabbedPane.selected", Color.gray); // set the color of selected tab to gray
         this.setVisible(true);
-        jMenuItem1 = new javax.swing.JMenuItem();
         jToolBar1 = new javax.swing.JToolBar();
         panelTexto = new JTextPane();
         panelTexto2 = new JTextPane();
@@ -61,11 +67,9 @@ public class Pantalla extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         panelVisualizacion = new JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea3 = new javax.swing.JTextArea();
@@ -77,14 +81,13 @@ public class Pantalla extends javax.swing.JFrame {
         menuAyuda = new javax.swing.JMenu();
         vistaVector=new VistaVector();
 
-        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jToolBar1.setRollover(true);
 
         boton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Introducir_Datos.png"))); // NOI18N
-        boton1.setToolTipText("Introducir Datos...");
+        boton1.setToolTipText(Sortrace.getIdioma().getProperty("archivoIntroducirDatos"));
         boton1.setFocusable(false);
         boton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         boton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -96,7 +99,7 @@ public class Pantalla extends javax.swing.JFrame {
         jToolBar1.add(boton1);
 
         boton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Datos_Aleatorios.png"))); // NOI18N
-        boton2.setToolTipText("Generar Datos Aleatorios...");
+        boton2.setToolTipText(Sortrace.getIdioma().getProperty("archivoGeneradDatos"));
         boton2.setFocusable(false);
         boton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         boton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -109,7 +112,7 @@ public class Pantalla extends javax.swing.JFrame {
         jToolBar1.add(boton2);
 
         boton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Cargar_Datos.png"))); // NOI18N
-        boton3.setToolTipText("Cargar Datos...");
+        boton3.setToolTipText(Sortrace.getIdioma().getProperty("archivoCargarDatos"));
         boton3.setFocusable(false);
         boton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         boton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -121,7 +124,7 @@ public class Pantalla extends javax.swing.JFrame {
         jToolBar1.add(boton3);
 
         boton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Modificar_Datos.png"))); // NOI18N
-        boton4.setToolTipText("Modificar Datos...");
+        boton4.setToolTipText(Sortrace.getIdioma().getProperty("archivoModificarDatos"));
         boton4.setFocusable(false);
         boton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         boton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -133,7 +136,7 @@ public class Pantalla extends javax.swing.JFrame {
         jToolBar1.add(boton4);
 
         boton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Guardar.png"))); // NOI18N
-        boton5.setToolTipText("Almacenar Ficheros...");
+        boton5.setToolTipText(Sortrace.getIdioma().getProperty("archivoAlmacenarFicheros"));
         boton5.setFocusable(false);
         boton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         boton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -149,7 +152,7 @@ public class Pantalla extends javax.swing.JFrame {
         jToolBar1.add(boton5);
 
         boton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Exportar_Imagen.png"))); // NOI18N
-        boton6.setToolTipText("Exportar imagen...");
+        boton6.setToolTipText(Sortrace.getIdioma().getProperty("archivoExportarImagen"));
         boton6.setFocusable(false);
         boton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         boton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -165,7 +168,7 @@ public class Pantalla extends javax.swing.JFrame {
         jToolBar1.add(boton6);
 
         boton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Exportar_Secuencia_Imagen.png"))); // NOI18N
-        boton7.setToolTipText("Exportar secuencia de imagenes...");
+        boton7.setToolTipText(Sortrace.getIdioma().getProperty("archivoExportarSecuencia"));
         boton7.setFocusable(false);
         boton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         boton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -177,7 +180,7 @@ public class Pantalla extends javax.swing.JFrame {
         jToolBar1.add(boton7);
 
         boton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Exportar_Animacion.png"))); // NOI18N
-        boton8.setToolTipText("Exportar animacion...");
+        boton8.setToolTipText(Sortrace.getIdioma().getProperty("archivoExportarAnimacion"));
         boton8.setFocusable(false);
         boton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         boton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -189,7 +192,7 @@ public class Pantalla extends javax.swing.JFrame {
         jToolBar1.add(boton8);
 
         boton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Salir.png"))); // NOI18N
-        boton9.setToolTipText("Salir");
+        boton9.setToolTipText(Sortrace.getIdioma().getProperty("archivoSalir"));
         boton9.setFocusable(false);
         boton9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         boton9.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -212,6 +215,7 @@ public class Pantalla extends javax.swing.JFrame {
 
         jToolBar1.add(boton10);
 
+        jToolBar1.setBorderPainted(false);
 
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -240,7 +244,7 @@ public class Pantalla extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Teoria", jPanel1);
+        jTabbedPane1.addTab(Sortrace.getIdioma().getProperty("teoriaPaginaTeoria"), jPanel1);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -267,8 +271,7 @@ public class Pantalla extends javax.swing.JFrame {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Codigo", jPanel2);
-
+        jTabbedPane1.addTab(Sortrace.getIdioma().getProperty("teoriaPaginaCodigo"), jPanel2);
         jLayeredPane1.setBorder(new javax.swing.border.MatteBorder(null));
 
         jTextArea3.setEditable(false);
@@ -296,7 +299,7 @@ public class Pantalla extends javax.swing.JFrame {
         jMenuBar1.setFocusable(false);
         jMenuBar1.setRequestFocusEnabled(false);
 
-        menuArchivo.setText("Archivo");
+        menuArchivo.setText(Sortrace.getIdioma().getProperty("menuArchivo"));
         menuArchivo.setFocusable(false);
         menuArchivo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -306,7 +309,7 @@ public class Pantalla extends javax.swing.JFrame {
         jMenuBar1.add(menuArchivo);
         menuArchivo.getAccessibleContext().setAccessibleDescription("");
 
-        menuEjecucion.setText("Ejecución");
+        menuEjecucion.setText(Sortrace.getIdioma().getProperty("menuEjecucion"));
         menuEjecucion.setFocusable(false);
         menuEjecucion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -315,7 +318,7 @@ public class Pantalla extends javax.swing.JFrame {
         });
         jMenuBar1.add(menuEjecucion);
 
-        menuAlgoritmos.setText("Algoritmos");
+        menuAlgoritmos.setText(Sortrace.getIdioma().getProperty("menuAlgoritmo"));
         menuAlgoritmos.setFocusable(false);
         menuAlgoritmos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -324,7 +327,7 @@ public class Pantalla extends javax.swing.JFrame {
         });
         jMenuBar1.add(menuAlgoritmos);
 
-        menuConfiguracion.setText("Configuracion");
+        menuConfiguracion.setText(Sortrace.getIdioma().getProperty("menuConfiguracion"));
         menuConfiguracion.setFocusable(false);
         menuConfiguracion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -333,7 +336,7 @@ public class Pantalla extends javax.swing.JFrame {
         });
         jMenuBar1.add(menuConfiguracion);
 
-        menuAyuda.setText("Ayuda");
+        menuAyuda.setText(Sortrace.getIdioma().getProperty("menuAyuda"));
         menuAyuda.setFocusable(false);
         menuAyuda.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -343,7 +346,11 @@ public class Pantalla extends javax.swing.JFrame {
         jMenuBar1.add(menuAyuda);
 
         setJMenuBar(jMenuBar1);
-
+        jPanelVistaVector= new JPanel();
+        Dimension dimension=new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()-500,500);
+        jPanelVistaVector.setSize(dimension);
+        jPanelVistaVector.add(vistaVector);
+        jPanelVistaVector.setVisible(true);
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -385,7 +392,7 @@ public class Pantalla extends javax.swing.JFrame {
         boton6.setEnabled(false);
         boton7.setEnabled(false);
         boton8.setEnabled(false);
-        boton9.setEnabled(false);
+        this.actualizarModo();
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -405,25 +412,25 @@ public class Pantalla extends javax.swing.JFrame {
         boton5.setMaximumSize(dimPred);
         jMenuBar1.setEnabled(false);
         boton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Pausa.png")));
-        boton1.setToolTipText("Pausa");
+        boton1.setToolTipText(Sortrace.getIdioma().getProperty("ejecucionPausa"));
         boton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Retroceder_Comienzo.png")));
-        boton2.setToolTipText("Retroceder al comienzo");
+        boton2.setToolTipText(Sortrace.getIdioma().getProperty("ejecucionRetrocederComienzo"));
         boton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Retroceder_Iteracion.png")));
-        boton3.setToolTipText("Retroceder al comienzo de la iteracion");
+        boton3.setToolTipText(Sortrace.getIdioma().getProperty("ejecucionRetrocederIteracion"));
         boton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Retroceder_Paso.png")));
-        boton4.setToolTipText("Retroceder un paso");
+        boton4.setToolTipText(Sortrace.getIdioma().getProperty("ejecucionRetrocederPaso"));
         boton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Retroceder_Continuo.png")));
-        boton5.setToolTipText("Retroceder continuo");
+        boton5.setToolTipText(Sortrace.getIdioma().getProperty("ejecucionRetrocederContinuo"));
         boton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Avanzar_Continuo.png")));
-        boton6.setToolTipText("Avanzar continuo");
+        boton6.setToolTipText(Sortrace.getIdioma().getProperty("ejecucionAvanzarContinuo"));
         boton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Avanzar_Paso.png")));
-        boton7.setToolTipText("Avanzar un paso");
+        boton7.setToolTipText(Sortrace.getIdioma().getProperty("ejecucionAvanzarPaso"));
         boton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Avanzar_Iteracion.png")));
-        boton8.setToolTipText("Avanzar al final de la iteracion");
+        boton8.setToolTipText(Sortrace.getIdioma().getProperty("ejecucionAvanzarIteracion"));
         boton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Avanzar_Final.png")));
-        boton9.setToolTipText("Avanzar al final");
+        boton9.setToolTipText(Sortrace.getIdioma().getProperty("ejecucionAvanzarFinal"));
         boton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Abandonar_Ejecucion.png")));
-        boton10.setToolTipText("Abandonar ejecucion");
+        boton10.setToolTipText(Sortrace.getIdioma().getProperty("ejecucionAbandonarEjecucion"));
         boton1.setText(null);
         boton2.setText(null);
         boton3.setText(null);
@@ -498,23 +505,23 @@ public class Pantalla extends javax.swing.JFrame {
         boton5.setMaximumSize(dimPred);
         jMenuBar1.setEnabled(false);
         boton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Introducir_Datos.png"))); // NOI18N
-        boton1.setToolTipText("Introducir Datos...");
+        boton1.setToolTipText(Sortrace.getIdioma().getProperty("archivoIntroducirDatos"));
         boton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Datos_Aleatorios.png"))); // NOI18N
-        boton2.setToolTipText("Generar Datos Aleatorios...");
+        boton2.setToolTipText(Sortrace.getIdioma().getProperty("archivoGeneradDatos"));
         boton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Cargar_Datos.png"))); // NOI18N
-        boton3.setToolTipText("Cargar Datos...");
+        boton3.setToolTipText(Sortrace.getIdioma().getProperty("archivoCargarDatos"));
         boton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Modificar_Datos.png"))); // NOI18N
-        boton4.setToolTipText("Modificar Datos...");
+        boton4.setToolTipText(Sortrace.getIdioma().getProperty("archivoModificarDatos"));
         boton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Guardar.png"))); // NOI18N
-        boton5.setToolTipText("Almacenar Ficheros...");
+        boton5.setToolTipText(Sortrace.getIdioma().getProperty("archivoAlmacenarFicheros"));
         boton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Exportar_Imagen.png"))); // NOI18N
-        boton6.setToolTipText("Exportar imagen...");
+        boton6.setToolTipText(Sortrace.getIdioma().getProperty("archivoExportarImagen"));
         boton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Exportar_Secuencia_Imagen.png"))); // NOI18N
-        boton7.setToolTipText("Exportar secuencia de imagenes...");
+        boton7.setToolTipText(Sortrace.getIdioma().getProperty("archivoExportarSecuencia"));
         boton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Exportar_Animacion.png"))); // NOI18N
-        boton8.setToolTipText("Exportar animacion...");
+        boton8.setToolTipText(Sortrace.getIdioma().getProperty("archivoExportarAnimacion"));
         boton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Boton_Salir.png"))); // NOI18N
-        boton9.setToolTipText("Salir");
+        boton9.setToolTipText(Sortrace.getIdioma().getProperty("archivoSalir"));
         boton1.setText(null);
         boton2.setText(null);
         boton3.setText(null);
@@ -581,20 +588,20 @@ public class Pantalla extends javax.swing.JFrame {
         jTabbedPane1.enable();
         jMenuBar1.setEnabled(false);
         boton1.setIcon(null);
-        boton1.setText("<html><p align=\"center\">Algoritmo de</p><p align=\"center\">selección</p></html>");
-        boton1.setToolTipText("Algoritmo de selección");
+        boton1.setText(Sortrace.getIdioma().getProperty("algoritmosTextoSeleccion"));
+        boton1.setToolTipText(Sortrace.getIdioma().getProperty("algortimosToolSeleccion"));
         boton2.setIcon(null);
-        boton2.setText("<html><p align=\"center\">Algoritmo de</p><p align=\"center\">inserción</p></html>");
-        boton2.setToolTipText("Algoritmo de inserción");
+        boton2.setText(Sortrace.getIdioma().getProperty("algoritmosTextoInsercion"));
+        boton2.setToolTipText(Sortrace.getIdioma().getProperty("algortimosToolInsercion"));
         boton3.setIcon(null);
-        boton3.setText("<html><p align=\"center\">Burbuja</p><p align=\"center\">básica</p></html>");
-        boton3.setToolTipText("Burbuja básica");
+        boton3.setText(Sortrace.getIdioma().getProperty("algoritmosTextoBurbujaBasica"));
+        boton3.setToolTipText(Sortrace.getIdioma().getProperty("algortimosToolBurbujaBasica"));
         boton4.setIcon(null);
-        boton4.setText("<html><p align=\"center\">Burbuja</p><p align=\"center\">avanzada</p></html>");
-        boton4.setToolTipText("Burbuja avanzada");
+        boton4.setText(Sortrace.getIdioma().getProperty("algoritmosTextoBurbujaAvanzada"));
+        boton4.setToolTipText(Sortrace.getIdioma().getProperty("algortimosToolBurbujaAvanzada"));
         boton5.setIcon(null);
-        boton5.setText("<html><p align=\"center\">Incrementos</p><p align=\"center\">decrecientes</p></html>");
-        boton5.setToolTipText("Incrementos decrecientes");
+        boton5.setText(Sortrace.getIdioma().getProperty("algoritmosTextoShell"));
+        boton5.setToolTipText(Sortrace.getIdioma().getProperty("algortimosToolSell"));
         boton1.setMaximumSize(new Dimension(250,300));
         boton2.setMaximumSize(new Dimension(250,300));
         boton3.setMaximumSize(new Dimension(250,300));
@@ -655,11 +662,11 @@ public class Pantalla extends javax.swing.JFrame {
         boton4.setMaximumSize(dimPred);
         boton5.setMaximumSize(dimPred);
         boton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Visualizacion.png"))); // NOI18N
-        boton1.setToolTipText("Visualizacion...");
+        boton1.setToolTipText(Sortrace.getIdioma().getProperty("configuracionVisualizacion"));
         boton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Idioma.png"))); // NOI18N
-        boton2.setToolTipText("Idioma...");
+        boton2.setToolTipText(Sortrace.getIdioma().getProperty("configuracionIdioma"));
         boton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/AjustesAnimacion.png"))); // NOI18N
-        boton3.setToolTipText("Animacion...");
+        boton3.setToolTipText(Sortrace.getIdioma().getProperty("configuracionAnimacion"));
 
         boton1.setEnabled(true);
         boton2.setEnabled(true);
@@ -723,9 +730,9 @@ public class Pantalla extends javax.swing.JFrame {
         boton4.setMaximumSize(dimPred);
         boton5.setMaximumSize(dimPred);
         boton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Ayuda.png"))); // NOI18N
-        boton1.setToolTipText("Ayuda de Sortrace...");
+        boton1.setToolTipText(Sortrace.getIdioma().getProperty("ayudaSortrace"));
         boton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/util/icon/Informacion.png"))); // NOI18N
-        boton2.setToolTipText("Sobre Sortrace");
+        boton2.setToolTipText(Sortrace.getIdioma().getProperty("ayudaSobreSortrace"));
 
         boton1.setEnabled(true);
         boton2.setEnabled(true);
@@ -783,9 +790,9 @@ public class Pantalla extends javax.swing.JFrame {
     private void boton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton1MouseClicked
         // TODO add your handling code here:
         //aqui
-        if(boton1.getToolTipText().equals("Introducir Datos...")){
+        if(boton1.getToolTipText().equals(Sortrace.getIdioma().getProperty("archivoIntroducirDatos"))){
             intNum =new IntroducirNumeros_IU(false);
-        }else if(boton1.getToolTipText().equals("Algoritmo de selección")){
+        }else if(boton1.getToolTipText().equals(Sortrace.getIdioma().getProperty("algortimosToolSeleccion"))){
             //panelTexto.removeAll();
             panelTexto = new JTextPane();
             panelTexto2 = new JTextPane();
@@ -810,9 +817,9 @@ public class Pantalla extends javax.swing.JFrame {
             StyleConstants.setFontSize(attrs2,18);
             try {
                 panelTexto.getStyledDocument().insertString(
-                        panelTexto.getStyledDocument().getLength(), "Algoritmo de seleccion\n\n", attrs2);
+                        panelTexto.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolSeleccion")+"\n\n", attrs2);
                 panelTexto2.getStyledDocument().insertString(
-                        panelTexto2.getStyledDocument().getLength(), "Algoritmo de seleccion\n\n", attrs2);
+                        panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolSeleccion")+"\n\n", attrs2);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
@@ -843,9 +850,10 @@ public class Pantalla extends javax.swing.JFrame {
             Sortrace.setAlgoritmo(new Seleccion(Sortrace.getVector().getVector()));
             Sortrace.getAlgoritmo().ejecutar();
             vistaVector.actualizarVector();
-        }else if(boton1.getToolTipText().equals("Ayuda de Sortrace...")){
+            this.actualizarModo();
+        }else if(boton1.getToolTipText().equals(Sortrace.getIdioma().getProperty("ayudaSortrace"))){
             new IU_Ayuda();
-        }else if(boton1.getToolTipText().equals("Pausa")){
+        }else if(boton1.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionPausa"))){
             try {
                 Sortrace.getAlgoritmo().pause();
             } catch (InterruptedException e) {
@@ -864,6 +872,8 @@ public class Pantalla extends javax.swing.JFrame {
             boton10.setEnabled(true);
 
             actualizarBotonesEjecucion();
+        }else if(boton1.getToolTipText().equals(Sortrace.getIdioma().getProperty("configuracionVisualizacion"))){
+            new Visualizacion();
         }
 
     }//GEN-LAST:event_boton1MouseClicked
@@ -871,9 +881,9 @@ public class Pantalla extends javax.swing.JFrame {
 
     private void boton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton2MouseClicked
         // TODO add your handling code here:
-        if(boton2.getToolTipText().equals("Generar Datos Aleatorios...")){
+        if(boton2.getToolTipText().equals(Sortrace.getIdioma().getProperty("archivoGeneradDatos"))){
             new GenerarDatosAleatorios_IU();
-        }else if(boton2.getToolTipText().equals("Algoritmo de inserción")){
+        }else if(boton2.getToolTipText().equals(Sortrace.getIdioma().getProperty("algortimosToolInsercion"))){
             //panelTexto.removeAll();
             panelTexto = new JTextPane();
             panelTexto2 = new JTextPane();
@@ -898,9 +908,9 @@ public class Pantalla extends javax.swing.JFrame {
             StyleConstants.setFontSize(attrs2,18);
             try {
                 panelTexto.getStyledDocument().insertString(
-                        panelTexto.getStyledDocument().getLength(), "Algoritmo de inserción\n\n", attrs2);
+                        panelTexto.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolInsercion")+"\n\n", attrs2);
                 panelTexto2.getStyledDocument().insertString(
-                        panelTexto2.getStyledDocument().getLength(), "Algoritmo de inserción\n\n", attrs2);
+                        panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolInsercion")+"\n\n", attrs2);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
@@ -930,8 +940,8 @@ public class Pantalla extends javax.swing.JFrame {
             Sortrace.setAlgoritmo(new Insercion(Sortrace.getVector().getVector()));
             Sortrace.getAlgoritmo().ejecutar();
             vistaVector.actualizarVector();
-
-        }else if(boton2.getToolTipText().equals("Retroceder al comienzo")){
+            this.actualizarModo();
+        }else if(boton2.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionRetrocederComienzo"))){
             Sortrace.getAlgoritmo().retrocederComienzo();
             this.mostrarPanelVisualizacion();
             boton1.setEnabled(false);
@@ -945,12 +955,25 @@ public class Pantalla extends javax.swing.JFrame {
             boton9.setEnabled(true);
             boton10.setEnabled(true);
             actualizarBotonesEjecucion();
+        }else if(boton2.getToolTipText().equals(Sortrace.getIdioma().getProperty("configuracionIdioma"))){
+            String[] idiomas = new String[]{Sortrace.getIdioma().getProperty("idiomaEspanol"), Sortrace.getIdioma().getProperty("idiomaIngles")};
+            //TextoDialogos.setTextoBotonesAceptarCancelar(language);
+            String idiomaSeleccionado = (String)JOptionPane.showInputDialog(this, Sortrace.getIdioma().getProperty("idiomaSeleccionMensaje"), Sortrace.getIdioma().getProperty("idiomaSeleccionTitulo"), 3, (Icon)null, idiomas,0);
+            if (idiomaSeleccionado != null && cambioIdioma(idiomaSeleccionado)) {
+                String[] opcionesConfirmacion = new String[]{Sortrace.getIdioma().getProperty("generarDatosBotonAceptar"), Sortrace.getIdioma().getProperty("generarDatosBotonCancelar")};
+                int confirmacion = JOptionPane.showOptionDialog(this, Sortrace.getIdioma().getProperty("idiomaCambioMensaje"), Sortrace.getIdioma().getProperty("idiomaCambioTitulo"), 0, 3, (Icon)null, opcionesConfirmacion, opcionesConfirmacion[0]);
+                Sortrace.getConfig().setIdioma(idiomaSeleccionado);
+                if (confirmacion == 0) {
+                    Sortrace.actualizarIdioma();
+                    actualizarPantalla(evt);
+                }
+            }
         }
     }//GEN-LAST:event_boton2MouseClicked
 
     private void boton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton3MouseClicked
         // TODO add your handling code here:
-        if(boton3.getToolTipText().equals("Cargar Datos...")) {
+        if(boton3.getToolTipText().equals(Sortrace.getIdioma().getProperty("archivoCargarDatos"))) {
             JFileChooser fileSelector = new JFileChooser();
             fileSelector.setFileSelectionMode(0);
             String dir = "C:\\";
@@ -970,7 +993,7 @@ public class Pantalla extends javax.swing.JFrame {
 
                 try {
                     if (fileSelector.getFileFilter() == null && !file.getName().toLowerCase().endsWith(".txt")) {
-                        JOptionPane.showMessageDialog(this, "errorExtensionFichero", "tituloErrorCargarFichero", 0, (Icon) null);
+                        JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorExtensionFichero"), Sortrace.getIdioma().getProperty("errorTituloFileNotFound"), 0, (Icon) null);
                     } else {
                         String extension = fileSelector.getFileFilter().getDescription();
                         if (!file.getName().toLowerCase().endsWith(extension)) {
@@ -986,24 +1009,24 @@ public class Pantalla extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, messageOK, "tituloExitoCargar", 1, (Icon) null);
                     }
                 } catch (FileNotFoundException var25) {
-                    JOptionPane.showMessageDialog(this, "El fichero no existe", "Error al cargar el archivo", 0, (Icon) null);
+                    JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorMensajeFileNotFound"), Sortrace.getIdioma().getProperty("errorTituloFileNotFound"), 0, (Icon) null);
                 } catch (IOException var26) {
-                    JOptionPane.showMessageDialog(this, "Se ha producido un error al cargar el archivo", "Error de entrada/salida", 0, (Icon) null);
+                    JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorMensajeIOException"), Sortrace.getIdioma().getProperty("errorTituloIOException"), 0, (Icon) null);
                 } catch (NumberFormatException var27) {
-                    JOptionPane.showMessageDialog(this, "Los datos introducidos no son válidos", "Error de entrada/salida", 0, (Icon) null);
+                    JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorMensajeNumberFormat"), Sortrace.getIdioma().getProperty("errorTituloNumberFormat"), 0, (Icon) null);
                 } finally {
                     try {
                         if (fr != null) {
                             fr.close();
                         }
                     } catch (IOException var24) {
-                        JOptionPane.showMessageDialog(this, "Se ha producido un error al cargar el archivo", "Error de entrada/salida", 0, (Icon) null);
+                        JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorMensajeIOException"), Sortrace.getIdioma().getProperty("errorTituloIOException"), 0, (Icon) null);
                     }
 
                 }
             }
             Sortrace.getPantalla().actualizarBotonesArchivo();
-        }else if(boton3.getToolTipText().equals("Burbuja básica")){
+        }else if(boton3.getToolTipText().equals(Sortrace.getIdioma().getProperty("algortimosToolBurbujaBasica"))){
             //panelTexto.removeAll();
             panelTexto = new JTextPane();
             panelTexto2 = new JTextPane();
@@ -1029,9 +1052,9 @@ public class Pantalla extends javax.swing.JFrame {
             StyleConstants.setFontSize(attrs2,18);
             try {
                 panelTexto.getStyledDocument().insertString(
-                        panelTexto.getStyledDocument().getLength(), "Burbuja básica\n\n", attrs2);
+                        panelTexto.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolBurbujaBasica")+"\n\n", attrs2);
                 panelTexto2.getStyledDocument().insertString(
-                        panelTexto2.getStyledDocument().getLength(), "Burbuja básica\n\n", attrs2);
+                        panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolBurbujaBasica")+"\n\n", attrs2);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
@@ -1060,7 +1083,8 @@ public class Pantalla extends javax.swing.JFrame {
             Sortrace.setAlgoritmo(new BurbujaBasica(Sortrace.getVector().getVector()));
             Sortrace.getAlgoritmo().ejecutar();
             vistaVector.actualizarVector();
-        }else if(boton3.getToolTipText().equals("Retroceder al comienzo de la iteracion")){
+            this.actualizarModo();
+        }else if(boton3.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionRetrocederIteracion"))){
             Sortrace.getAlgoritmo().retrocederIteracion();
             this.mostrarPanelVisualizacion();
             boton1.setEnabled(false);
@@ -1079,9 +1103,9 @@ public class Pantalla extends javax.swing.JFrame {
 
     private void boton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton4MouseClicked
         // TODO add your handling code here:
-        if(boton4.getToolTipText().equals("Modificar Datos...")){
+        if(boton4.getToolTipText().equals(Sortrace.getIdioma().getProperty("archivoModificarDatos"))){
             intNum =new IntroducirNumeros_IU(true);
-        }else if(boton4.getToolTipText().equals("Burbuja avanzada")){
+        }else if(boton4.getToolTipText().equals(Sortrace.getIdioma().getProperty("algortimosToolBurbujaAvanzada"))){
             //panelTexto.removeAll();
             panelTexto = new JTextPane();
             panelTexto2 = new JTextPane();
@@ -1107,9 +1131,9 @@ public class Pantalla extends javax.swing.JFrame {
             StyleConstants.setFontSize(attrs2,18);
             try {
                 panelTexto.getStyledDocument().insertString(
-                        panelTexto.getStyledDocument().getLength(), "Burbuja avanzada\n\n", attrs2);
+                        panelTexto.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolBurbujaAvanzada")+"\n\n", attrs2);
                 panelTexto2.getStyledDocument().insertString(
-                        panelTexto2.getStyledDocument().getLength(), "Burbuja avanzada\n\n", attrs2);
+                        panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolBurbujaAvanzada")+"\n\n", attrs2);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
@@ -1139,7 +1163,8 @@ public class Pantalla extends javax.swing.JFrame {
             Sortrace.setAlgoritmo(new BurbujaAvanzada(Sortrace.getVector().getVector()));
             Sortrace.getAlgoritmo().ejecutar();
             vistaVector.actualizarVector();
-        }else if(boton4.getToolTipText().equals("Retroceder un paso")){
+            this.actualizarModo();
+        }else if(boton4.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionRetrocederPaso"))){
             Sortrace.getAlgoritmo().retrocederPaso();
             this.mostrarPanelVisualizacion();
             boton1.setEnabled(false);
@@ -1157,7 +1182,7 @@ public class Pantalla extends javax.swing.JFrame {
     }//GEN-LAST:event_boton4MouseClicked
     private void boton5MouseClicked(java.awt.event.MouseEvent evt) throws InterruptedException {//GEN-FIRST:event_boton3MouseClicked
         // TODO add your handling code here:
-        if(boton5.getToolTipText().equals("Almacenar Ficheros...")) {
+        if(boton5.getToolTipText().equals(Sortrace.getIdioma().getProperty("archivoAlmacenarFicheros"))) {
             JFileChooser fileSelector = new JFileChooser();
             fileSelector.setFileSelectionMode(0);
             String dir = "C:\\";
@@ -1177,7 +1202,7 @@ public class Pantalla extends javax.swing.JFrame {
 
                 try {
                     if (fileSelector.getFileFilter() == null && !file.getName().toLowerCase().endsWith(".txt")) {
-                        JOptionPane.showMessageDialog(this, "errorExtensionFichero", "tituloErrorGuardarFichero", 0, (Icon) null);
+                        JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorExtensionFichero"), Sortrace.getIdioma().getProperty("errorTituloFileNotFound"), 0, (Icon) null);
                     } else {
                         String extension = fileSelector.getFileFilter().getDescription();
                         if (!file.getName().toLowerCase().endsWith(extension)) {
@@ -1195,21 +1220,21 @@ public class Pantalla extends javax.swing.JFrame {
                         }
                     }
                 } catch (FileNotFoundException var23) {
-                    JOptionPane.showMessageDialog(this, "ficheroNoEncontrado", "tituloFicheroNoEncontradoGuardar", 0, (Icon) null);
+                    JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorMensajeGuardarFileNotFound"), Sortrace.getIdioma().getProperty("errorTituloGuardarFileNotFound"), 0, (Icon)null);
                 } catch (IOException var24) {
-                    JOptionPane.showMessageDialog(this, "ioExceptionGuardar", "tituloIOException", 0, (Icon) null);
+                    JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorMensajeIOExceptionGuardar"), Sortrace.getIdioma().getProperty("errorTituloIOExceptionGuardar"), 0, (Icon) null);
                 } finally {
                     try {
                         if (fw != null) {
                             fw.close();
                         }
                     } catch (IOException var22) {
-                        JOptionPane.showMessageDialog(this, "ioExceptionGuardar", "tituloIOException", 0, (Icon) null);
+                        JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorMensajeIOExceptionGuardar"), Sortrace.getIdioma().getProperty("errorTituloIOExceptionGuardar"), 0, (Icon) null);
                     }
 
                 }
             }
-        }else if(boton5.getToolTipText().equals("Incrementos decrecientes")){
+        }else if(boton5.getToolTipText().equals(Sortrace.getIdioma().getProperty("algortimosToolSell"))){
             //panelTexto.removeAll();
             panelTexto = new JTextPane();
             panelTexto2 = new JTextPane();
@@ -1234,9 +1259,9 @@ public class Pantalla extends javax.swing.JFrame {
             StyleConstants.setFontSize(attrs2,18);
             try {
                 panelTexto.getStyledDocument().insertString(
-                        panelTexto.getStyledDocument().getLength(), "Incrementos decrecientes\n\n", attrs2);
+                        panelTexto.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolSell")+"\n\n", attrs2);
                 panelTexto2.getStyledDocument().insertString(
-                        panelTexto2.getStyledDocument().getLength(), "Incrementos decrecientes\n\n", attrs2);
+                        panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolSell")+"\n\n", attrs2);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
@@ -1266,7 +1291,8 @@ public class Pantalla extends javax.swing.JFrame {
             Sortrace.setAlgoritmo(new Shell(Sortrace.getVector().getVector()));
             Sortrace.getAlgoritmo().ejecutar();
             vistaVector.actualizarVector();
-        }else if(boton5.getToolTipText().equals("Retroceder continuo")) {
+            this.actualizarModo();
+        }else if(boton5.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionRetrocederContinuo"))) {
             Sortrace.getAlgoritmo().retrocederContinuo();
             this.mostrarPanelVisualizacion();
             boton1.setEnabled(true);
@@ -1284,7 +1310,7 @@ public class Pantalla extends javax.swing.JFrame {
     }
     private void boton6MouseClicked(java.awt.event.MouseEvent evt) throws InterruptedException {//GEN-FIRST:event_boton4MouseClicked
         // TODO add your handling code here:
-        if(boton6.getToolTipText().equals("Avanzar continuo")) {
+        if(boton6.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionAvanzarContinuo"))) {
             Sortrace.getAlgoritmo().avanzarContinuo();
             this.mostrarPanelVisualizacion();
             boton1.setEnabled(true);
@@ -1298,13 +1324,68 @@ public class Pantalla extends javax.swing.JFrame {
             boton9.setEnabled(false);
             boton10.setEnabled(true);
 
+        }else if(boton6.getToolTipText().equals(Sortrace.getIdioma().getProperty("archivoExportarImagen"))){
+            JFileChooser panelFileSelector = new JFileChooser();
+            FileNameExtensionFilter filtroPNG = new FileNameExtensionFilter(".png", "png");
+            FileNameExtensionFilter filtroJPG = new FileNameExtensionFilter(".jpg", "jpg");
+            panelFileSelector.addChoosableFileFilter(filtroPNG);
+            panelFileSelector.addChoosableFileFilter(filtroJPG);
+            panelFileSelector.setFileFilter(filtroJPG);
+            panelFileSelector.setAcceptAllFileFilterUsed(false);
+            String dir = "C:\\";
+            if (dir != null) {
+                panelFileSelector.setCurrentDirectory(new File(dir));
+            }
+
+            int aceptarExportarImagen = panelFileSelector.showSaveDialog(this);
+            if (aceptarExportarImagen == 0) {
+                File file = panelFileSelector.getSelectedFile().getAbsoluteFile();
+                String nombreFichero = file.getName();
+                String nombreFicheroCompleto = file.getAbsolutePath();
+
+                try {
+                    if (panelFileSelector.getFileFilter() == null && !file.getName().toLowerCase().endsWith(".jpg") && !file.getName().toLowerCase().endsWith(".png")) {
+                        JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorExtensionFichero"), Sortrace.getIdioma().getProperty("tituloErrorExtensionImagen"), 0, (Icon)null);
+                    } else {
+                        String extension;
+                        if (panelFileSelector.getFileFilter() != null) {
+                            extension = panelFileSelector.getFileFilter().getDescription();
+                            if (!file.getName().toLowerCase().endsWith(extension)) {
+                                nombreFicheroCompleto = nombreFicheroCompleto + extension;
+                                nombreFichero = nombreFichero + extension;
+                            }
+                        } else if (file.getName().toLowerCase().endsWith(".jpg")) {
+                            extension = ".jpg";
+                        } else {
+                            extension = ".png";
+                        }
+
+                        if (!file.exists() || this.sobrescribirArchivo()) {
+                            if (extension.equals(".jpg")) {
+                                BufferedImage imagen = new BufferedImage(vistaVector.getWidth()*2/3, vistaVector.getHeight(), 1);
+                                Graphics g = imagen.getGraphics();
+                                vistaVector.paint(g);
+                                ImageIO.write(imagen, "JPG", new File(nombreFicheroCompleto));
+                            } else {
+                                BufferedImage imagen = new BufferedImage(vistaVector.getWidth(), vistaVector.getHeight(), 1);
+                                Graphics g = imagen.getGraphics();
+                                vistaVector.paint(g);
+                                ImageIO.write(imagen, "PNG", new File(nombreFicheroCompleto));
+                            }
+
+                            String messageOK = "\"" + nombreFichero + "\" " + Sortrace.getIdioma().getProperty("exitoGuardar");
+                            JOptionPane.showMessageDialog(this, messageOK, Sortrace.getIdioma().getProperty("tituloExitoGuardar"), 1, (Icon)null);
+                        }
+                    }
+                } catch (IOException var11) {
+                    JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("ioExceptionGuardar") + nombreFichero, Sortrace.getIdioma().getProperty("tituloIOException"), 0, (Icon)null);
+                }
+            }
         }
     }
     private void boton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton4MouseClicked
         // TODO add your handling code here:
-        if(boton7.getToolTipText().equals("Avanzar Paso...")) {
-            intNum = new IntroducirNumeros_IU(true);
-        }else if(boton7.getToolTipText().equals("Avanzar un paso")){
+        if(boton7.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionAvanzarPaso"))){
             Sortrace.getAlgoritmo().avanzarPaso();
             try {
                 sleep(200);
@@ -1327,7 +1408,7 @@ public class Pantalla extends javax.swing.JFrame {
     }
     private void boton8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton4MouseClicked
         // TODO add your handling code here:
-        if(boton8.getToolTipText().equals("Avanzar al final de la iteracion")){
+        if(boton8.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionAvanzarIteracion"))){
             Sortrace.getAlgoritmo().avanzarIteracion();
             try {
                 sleep(100);
@@ -1349,9 +1430,9 @@ public class Pantalla extends javax.swing.JFrame {
         }
     }
     private void boton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton9MouseClicked
-        if(boton9.getToolTipText().equals("Salir")){
+        if(boton9.getToolTipText().equals(Sortrace.getIdioma().getProperty("archivoSalir"))){
             this.dispose();
-        }else if(boton9.getToolTipText().equals("Avanzar al final")){
+        }else if(boton9.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionAvanzarFinal"))){
             Sortrace.getAlgoritmo().avanzarFinal();
             try {
                 sleep(100);
@@ -1373,7 +1454,7 @@ public class Pantalla extends javax.swing.JFrame {
         }
     }
     private void boton10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton9MouseClicked
-        if(boton10.getToolTipText().equals("Abandonar ejecucion")){
+        if(boton10.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionAbandonarEjecucion"))){
             Sortrace.getAlgoritmo().terminar();
             vistaVector.actualizarVector();
             boton1.setEnabled(false);
@@ -1395,14 +1476,12 @@ public class Pantalla extends javax.swing.JFrame {
             boton6.setEnabled(false);
             boton7.setEnabled(false);
             boton8.setEnabled(false);
-            boton9.setEnabled(false);
         }else{
             boton4.setEnabled(true);
             boton5.setEnabled(true);
             boton6.setEnabled(true);
             boton7.setEnabled(true);
             boton8.setEnabled(true);
-            boton9.setEnabled(true);
         }
     }
     public void actualizarBotonesEjecucion(){
@@ -1446,6 +1525,458 @@ public class Pantalla extends javax.swing.JFrame {
         int opcion = JOptionPane.showOptionDialog(this, "sobrescribirArchivo", "tituloGuardar", -1, 2, (Icon)null, options, options[0]);
         return opcion == 0;
     }
+    public void subrayarComparacionCodigo(){
+        if(jTabbedPane1.isEnabledAt(1)) {
+            int linea = 0;
+            panelTexto2.setText("");
+            TeoriaAlgoritmo teoriaAlgoritmo = new TeoriaAlgoritmo("seleccion");
+            if (Sortrace.getAlgoritmo() instanceof Seleccion) {
+                linea = 5;
+                teoriaAlgoritmo = new TeoriaAlgoritmo("seleccion");
+
+            } else if (Sortrace.getAlgoritmo() instanceof BurbujaBasica) {
+                linea = 3;
+                teoriaAlgoritmo = new TeoriaAlgoritmo("burbujabasica");
+
+            } else if (Sortrace.getAlgoritmo() instanceof BurbujaAvanzada) {
+                linea = 5;
+                teoriaAlgoritmo = new TeoriaAlgoritmo("burbujaavanzada");
+
+            } else if (Sortrace.getAlgoritmo() instanceof Insercion) {
+                linea = 4;
+                teoriaAlgoritmo = new TeoriaAlgoritmo("insercion");
+
+            } else if (Sortrace.getAlgoritmo() instanceof Shell) {
+                linea = 4;
+                teoriaAlgoritmo = new TeoriaAlgoritmo("shell");
+            }
+            String[] textoCodigo = teoriaAlgoritmo.getTextoCodigo();
+
+            SimpleAttributeSet attrs = new SimpleAttributeSet();
+            SimpleAttributeSet attrs2 = new SimpleAttributeSet();
+            SimpleAttributeSet attrs3 = new SimpleAttributeSet();
+
+            StyleConstants.setFontFamily(attrs, "alegreya sans");
+            StyleConstants.setFontSize(attrs, 14);
+            StyleConstants.setBackground(attrs, Color.CYAN);
+            StyleConstants.setFontFamily(attrs3, "alegreya sans");
+            StyleConstants.setFontSize(attrs3, 14);
+            StyleConstants.setBold(attrs2, true);
+            StyleConstants.setAlignment(attrs2, StyleConstants.ALIGN_CENTER);
+            StyleConstants.setFontFamily(attrs2, "alegreya sans");
+            StyleConstants.setFontSize(attrs2, 18);
+            try {
+                panelTexto2.getStyledDocument().insertString(
+                        panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolSell") + "\n\n", attrs2);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < textoCodigo.length; i++) {
+                if (i == linea) {
+                    try {
+                        panelTexto2.getStyledDocument().insertString(
+                                panelTexto2.getStyledDocument().getLength(), textoCodigo[i], attrs);
+                    } catch (BadLocationException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        panelTexto2.getStyledDocument().insertString(
+                                panelTexto2.getStyledDocument().getLength(), textoCodigo[i], attrs3);
+                    } catch (BadLocationException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            panelTexto2.setCaretPosition(0);
+        }
+    }
+
+    public void subrayarAsignacionCodigo(){
+        if(jTabbedPane1.isEnabledAt(1)) {
+            int linea = 0;
+            int linea1 = 0;
+            int linea2 = 0;
+            panelTexto2.setText("");
+            TeoriaAlgoritmo teoriaAlgoritmo = new TeoriaAlgoritmo("seleccion");
+            if (Sortrace.getAlgoritmo() instanceof Seleccion) {
+                linea = 7;
+                linea1 = 8;
+                linea2 = 9;
+                teoriaAlgoritmo = new TeoriaAlgoritmo("seleccion");
+
+            } else if (Sortrace.getAlgoritmo() instanceof BurbujaBasica) {
+                linea = 4;
+                linea1 = 5;
+                linea2 = 6;
+                teoriaAlgoritmo = new TeoriaAlgoritmo("burbujabasica");
+
+            } else if (Sortrace.getAlgoritmo() instanceof BurbujaAvanzada) {
+                linea = 6;
+                linea1 = 7;
+                linea2 = 8;
+                teoriaAlgoritmo = new TeoriaAlgoritmo("burbujaavanzada");
+
+            } else if (Sortrace.getAlgoritmo() instanceof Insercion) {
+                linea = 5;
+                linea1 = 7;
+                linea2 = 100;
+                teoriaAlgoritmo = new TeoriaAlgoritmo("insercion");
+
+            } else if (Sortrace.getAlgoritmo() instanceof Shell) {
+                linea = 5;
+                linea1 = 6;
+                linea2 = 7;
+                teoriaAlgoritmo = new TeoriaAlgoritmo("shell");
+            }
+            String[] textoCodigo = teoriaAlgoritmo.getTextoCodigo();
+
+            SimpleAttributeSet attrs = new SimpleAttributeSet();
+            SimpleAttributeSet attrs2 = new SimpleAttributeSet();
+            SimpleAttributeSet attrs3 = new SimpleAttributeSet();
+
+            StyleConstants.setFontFamily(attrs, "alegreya sans");
+            StyleConstants.setFontSize(attrs, 14);
+            StyleConstants.setBackground(attrs, Color.YELLOW);
+            StyleConstants.setFontFamily(attrs3, "alegreya sans");
+            StyleConstants.setFontSize(attrs3, 14);
+            StyleConstants.setBold(attrs2, true);
+            StyleConstants.setAlignment(attrs2, StyleConstants.ALIGN_CENTER);
+            StyleConstants.setFontFamily(attrs2, "alegreya sans");
+            StyleConstants.setFontSize(attrs2, 18);
+            try {
+                panelTexto2.getStyledDocument().insertString(
+                        panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolSell") + "\n\n", attrs2);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < textoCodigo.length; i++) {
+                if ((i == linea) || (i==linea1) || (i==linea2)) {
+                    try {
+                        panelTexto2.getStyledDocument().insertString(
+                                panelTexto2.getStyledDocument().getLength(), textoCodigo[i], attrs);
+                    } catch (BadLocationException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        panelTexto2.getStyledDocument().insertString(
+                                panelTexto2.getStyledDocument().getLength(), textoCodigo[i], attrs3);
+                    } catch (BadLocationException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            panelTexto2.setCaretPosition(0);
+        }
+    }
+    public boolean cambioIdioma(String idiomaSeleccionado){
+        if(idiomaSeleccionado.equals("ESPAÑOL") || idiomaSeleccionado.equals("SPANISH")){
+            return (Sortrace.getConfig().getIdioma().equals("INGLES") || Sortrace.getConfig().getIdioma().equals("ENGLISH"));
+        }else{
+            return (Sortrace.getConfig().getIdioma().equals("ESPAÑOL") || Sortrace.getConfig().getIdioma().equals("SPANISH"));
+        }
+    }
+    public void actualizarPantalla(MouseEvent evt){
+        actualizarPanelTeoria();
+        actualizarMenu(evt);
+        actualizarVista();
+    }
+
+    public void actualizarMenu(MouseEvent evt){
+        menuArchivo.setText(Sortrace.getIdioma().getProperty("menuArchivo"));
+        menuEjecucion.setText(Sortrace.getIdioma().getProperty("menuEjecucion"));
+        menuAlgoritmos.setText(Sortrace.getIdioma().getProperty("menuAlgoritmo"));
+        menuConfiguracion.setText(Sortrace.getIdioma().getProperty("menuConfiguracion"));
+        menuAyuda.setText(Sortrace.getIdioma().getProperty("menuAyuda"));
+
+        menuConfiguracionMouseClicked(evt);
+    }
+
+    public void actualizarVista(){
+        if((Sortrace.getAlgoritmo()!=null) && (Sortrace.getVector().getVector()!=null)){
+            vistaVector.actualizarVector();
+        }
+    }
+
+    public void actualizarPanelTeoria(){
+        int index = jTabbedPane1.getSelectedIndex();
+        jTabbedPane1.setTitleAt(0,Sortrace.getIdioma().getProperty("teoriaPaginaTeoria"));
+        jTabbedPane1.setTitleAt(1,Sortrace.getIdioma().getProperty("teoriaPaginaCodigo"));
+
+        if(Sortrace.getAlgoritmo()!=null) {
+            panelTexto = new JTextPane();
+            panelTexto2 = new JTextPane();
+
+            jScrollPane1.setViewportView(panelTexto);
+            jScrollPane2.setViewportView(panelTexto2);
+            SimpleAttributeSet attrs = new SimpleAttributeSet();
+            SimpleAttributeSet attrs2 = new SimpleAttributeSet();
+            SimpleAttributeSet attrs3 = new SimpleAttributeSet();
+
+            StyleConstants.setFontFamily(attrs3, "alegreya sans");
+            StyleConstants.setFontSize(attrs3, 14);
+            StyleConstants.setBold(attrs2, true);
+            StyleConstants.setAlignment(attrs2, StyleConstants.ALIGN_CENTER);
+            StyleConstants.setFontFamily(attrs2, "alegreya sans");
+            StyleConstants.setFontSize(attrs2, 18);
+
+
+            TeoriaAlgoritmo teoriaAlgoritmo = new TeoriaAlgoritmo("seleccion");
+            if (Sortrace.getAlgoritmo() instanceof Seleccion) {
+                teoriaAlgoritmo = new TeoriaAlgoritmo("seleccion");
+                try {
+                    panelTexto.getStyledDocument().insertString(
+                            panelTexto.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolSeleccion") + "\n\n", attrs2);
+                    panelTexto2.getStyledDocument().insertString(
+                            panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolSeleccion") + "\n\n", attrs2);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (Sortrace.getAlgoritmo() instanceof BurbujaBasica) {
+                teoriaAlgoritmo = new TeoriaAlgoritmo("burbujabasica");
+                try {
+                    panelTexto.getStyledDocument().insertString(
+                            panelTexto.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolBurbujaBasica") + "\n\n", attrs2);
+                    panelTexto2.getStyledDocument().insertString(
+                            panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolBurbujaBasica") + "\n\n", attrs2);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (Sortrace.getAlgoritmo() instanceof BurbujaAvanzada) {
+                teoriaAlgoritmo = new TeoriaAlgoritmo("burbujaavanzada");
+                try {
+                    panelTexto.getStyledDocument().insertString(
+                            panelTexto.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolBurbujaAvanzada") + "\n\n", attrs2);
+                    panelTexto2.getStyledDocument().insertString(
+                            panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolBurbujaAvanzada") + "\n\n", attrs2);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (Sortrace.getAlgoritmo() instanceof Insercion) {
+                teoriaAlgoritmo = new TeoriaAlgoritmo("insercion");
+                try {
+                    panelTexto.getStyledDocument().insertString(
+                            panelTexto.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolInsercion") + "\n\n", attrs2);
+                    panelTexto2.getStyledDocument().insertString(
+                            panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolInsercion") + "\n\n", attrs2);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (Sortrace.getAlgoritmo() instanceof Shell) {
+                teoriaAlgoritmo = new TeoriaAlgoritmo("shell");
+                try {
+                    panelTexto.getStyledDocument().insertString(
+                            panelTexto.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolSell") + "\n\n", attrs2);
+                    panelTexto2.getStyledDocument().insertString(
+                            panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolSell") + "\n\n", attrs2);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+            }
+            String[] texto = teoriaAlgoritmo.getTexto();
+            String[] textoCodigo = teoriaAlgoritmo.getTextoCodigo();
+            ImageIcon[] imagenes = teoriaAlgoritmo.getIcons();
+
+            for (int i = 0; i < texto.length; i++) {
+                try {
+                    panelTexto.getStyledDocument().insertString(
+                            panelTexto.getStyledDocument().getLength(), texto[i], attrs);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+                if (i < imagenes.length) {
+                    panelTexto.setCaretPosition(panelTexto.getStyledDocument().getLength());
+                    panelTexto.insertIcon(imagenes[i]);
+                }
+            }
+            for (int i = 0; i < textoCodigo.length; i++) {
+                try {
+                    panelTexto2.getStyledDocument().insertString(
+                            panelTexto2.getStyledDocument().getLength(), textoCodigo[i], attrs3);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+            }
+            panelTexto.setCaretPosition(0);
+            panelTexto2.setCaretPosition(0);
+        }
+    }
+
+    public void actualizarPanelCodigo(){
+        if(jTabbedPane1.isEnabledAt(1)) {
+            int linea = 9999;
+            panelTexto2.setText("");
+            TeoriaAlgoritmo teoriaAlgoritmo = new TeoriaAlgoritmo("seleccion");
+            if (Sortrace.getAlgoritmo() instanceof Seleccion) {
+                teoriaAlgoritmo = new TeoriaAlgoritmo("seleccion");
+
+            } else if (Sortrace.getAlgoritmo() instanceof BurbujaBasica) {
+                teoriaAlgoritmo = new TeoriaAlgoritmo("burbujabasica");
+
+            } else if (Sortrace.getAlgoritmo() instanceof BurbujaAvanzada) {
+                teoriaAlgoritmo = new TeoriaAlgoritmo("burbujaavanzada");
+
+            } else if (Sortrace.getAlgoritmo() instanceof Insercion) {
+                teoriaAlgoritmo = new TeoriaAlgoritmo("insercion");
+
+            } else if (Sortrace.getAlgoritmo() instanceof Shell) {
+                teoriaAlgoritmo = new TeoriaAlgoritmo("shell");
+            }
+            String[] textoCodigo = teoriaAlgoritmo.getTextoCodigo();
+
+            SimpleAttributeSet attrs = new SimpleAttributeSet();
+            SimpleAttributeSet attrs2 = new SimpleAttributeSet();
+            SimpleAttributeSet attrs3 = new SimpleAttributeSet();
+
+            StyleConstants.setFontFamily(attrs, "alegreya sans");
+            StyleConstants.setFontSize(attrs, 14);
+            StyleConstants.setBackground(attrs, Color.CYAN);
+            StyleConstants.setFontFamily(attrs3, "alegreya sans");
+            StyleConstants.setFontSize(attrs3, 14);
+            StyleConstants.setBold(attrs2, true);
+            StyleConstants.setAlignment(attrs2, StyleConstants.ALIGN_CENTER);
+            StyleConstants.setFontFamily(attrs2, "alegreya sans");
+            StyleConstants.setFontSize(attrs2, 18);
+            try {
+                panelTexto2.getStyledDocument().insertString(
+                        panelTexto2.getStyledDocument().getLength(), Sortrace.getIdioma().getProperty("algortimosToolSell") + "\n\n", attrs2);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < textoCodigo.length; i++) {
+                try {
+                    panelTexto2.getStyledDocument().insertString(
+                            panelTexto2.getStyledDocument().getLength(), textoCodigo[i], attrs3);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            panelTexto2.setCaretPosition(0);
+        }
+    }
+
+    public void actualizarModo(){
+        if(Sortrace.getConfig().getModo().equals("si")) {
+            this.getContentPane().setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            jPanel1.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            boton1.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            boton1.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            boton2.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            boton2.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            boton3.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            boton3.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            boton4.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            boton4.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            boton5.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            boton5.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            boton6.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            boton6.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            boton7.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            boton7.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            boton8.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            boton8.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            boton9.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            boton9.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            boton10.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            boton10.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jLayeredPane1.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            jMenuBar1.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            jMenuBar1.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jPanelVistaVector.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            jPanel2.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            panelVisualizacion.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            jScrollPane1.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            jScrollPane2.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            jScrollPane3.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            jTabbedPane1.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            jTabbedPane1.setBackgroundAt(0,Sortrace.getConfig().getFondoModoOscuro());
+            jTabbedPane1.setBackgroundAt(1,Sortrace.getConfig().getFondoModoOscuro());
+            jTabbedPane1.setForegroundAt(0,Sortrace.getConfig().getTextoModoOscuro());
+            jTabbedPane1.setForegroundAt(1,Sortrace.getConfig().getTextoModoOscuro());
+
+            jToolBar1.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            menuAlgoritmos.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            menuAlgoritmos.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            menuArchivo.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            menuArchivo.setForeground(Sortrace.getConfig().getTextoModoOscuro());;
+            menuAyuda.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            menuAyuda.setForeground(Sortrace.getConfig().getTextoModoOscuro());;
+            menuConfiguracion.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            menuConfiguracion.setForeground(Sortrace.getConfig().getTextoModoOscuro());;
+            menuEjecucion.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            menuEjecucion.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            panelTexto.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            panelTexto.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            panelTexto2.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            panelTexto2.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            vistaVector.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+
+            //vistaVector;
+        }else{
+            this.getContentPane().setBackground(UIManager.getColor ("JFrame.background"));
+            jPanel1.setBackground(UIManager.getColor ("JPanel.background"));
+            boton1.setBackground(UIManager.getColor("JButton.background"));
+            boton1.setForeground(UIManager.getColor("JButton.foreground"));
+            boton2.setBackground(UIManager.getColor("JButton.background"));
+            boton2.setForeground(UIManager.getColor("JButton.foreground"));
+            boton3.setBackground(UIManager.getColor("JButton.background"));
+            boton3.setForeground(UIManager.getColor("JButton.foreground"));
+            boton4.setBackground(UIManager.getColor("JButton.background"));
+            boton4.setForeground(UIManager.getColor("JButton.foreground"));
+            boton5.setBackground(UIManager.getColor("JButton.background"));
+            boton5.setForeground(UIManager.getColor("JButton.foreground"));
+            boton6.setBackground(UIManager.getColor("JButton.background"));
+            boton6.setForeground(UIManager.getColor("JButton.foreground"));
+            boton7.setBackground(UIManager.getColor("JButton.background"));
+            boton7.setForeground(UIManager.getColor("JButton.foreground"));
+            boton8.setBackground(UIManager.getColor("JButton.background"));
+            boton8.setForeground(UIManager.getColor("JButton.foreground"));
+            boton9.setBackground(UIManager.getColor("JButton.background"));
+            boton9.setForeground(UIManager.getColor("JButton.foreground"));
+            boton10.setBackground(UIManager.getColor("JButton.background"));
+            boton10.setForeground(UIManager.getColor("JButton.foreground"));
+            jLayeredPane1.setBackground(UIManager.getColor ("JLayeredPane.background"));
+            jMenuBar1.setBackground(UIManager.getColor ("jMenuBar.background"));
+            jMenuBar1.setForeground(UIManager.getColor ("jMenuBar.foreground"));
+            jPanelVistaVector.setBackground(UIManager.getColor ("jMenuBar.background"));
+            jPanel2.setBackground(UIManager.getColor ("jPanel.background"));
+            panelVisualizacion.setBackground(UIManager.getColor ("jPanel.background"));
+            jScrollPane1.setBackground(UIManager.getColor ("jScrollPane.background"));
+            jScrollPane2.setBackground(UIManager.getColor ("jScrollPane.background"));
+            jScrollPane3.setBackground(UIManager.getColor ("jScrollPane.background"));
+            jTabbedPane1.setBackground(UIManager.getColor ("jTabbedPane.background"));
+            jTabbedPane1.setBackgroundAt(0,UIManager.getColor ("jTab.background"));
+            jTabbedPane1.setBackgroundAt(1,UIManager.getColor ("jTab.background"));
+            jTabbedPane1.setForegroundAt(0,UIManager.getColor ("jTab.foreground"));
+            jTabbedPane1.setForegroundAt(1,UIManager.getColor ("jTab.foreground"));
+            jToolBar1.setBackground(UIManager.getColor ("jToolBar.background"));
+            menuAlgoritmos.setBackground(UIManager.getColor ("jMenu.background"));
+            menuAlgoritmos.setForeground(UIManager.getColor ("jMenu.foreground"));
+            menuArchivo.setBackground(UIManager.getColor ("jMenu.background"));
+            menuArchivo.setForeground(UIManager.getColor ("jMenu.foreground"));;
+            menuAyuda.setBackground(UIManager.getColor ("jMenu.background"));
+            menuAyuda.setForeground(UIManager.getColor ("jMenu.foreground"));;
+            menuConfiguracion.setBackground(UIManager.getColor ("jMenu.background"));
+            menuConfiguracion.setForeground(UIManager.getColor ("jMenu.foreground"));;
+            menuEjecucion.setBackground(UIManager.getColor ("jMenu.background"));
+            menuEjecucion.setForeground(UIManager.getColor ("jMenu.foreground"));
+            panelTexto.setBackground(UIManager.getColor ("JTextPane.background"));
+            panelTexto.setForeground(UIManager.getColor ("JTextPane.foreground"));
+            panelTexto2.setBackground(UIManager.getColor ("JTextPane.background"));
+            panelTexto2.setForeground(UIManager.getColor ("JTextPane.foreground"));
+            vistaVector.setBackground(UIManager.getColor ("JPanel.foreground"));
+            //vistaVector;
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -1494,16 +2025,14 @@ public class Pantalla extends javax.swing.JFrame {
     private javax.swing.JButton boton9;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanelVistaVector;
     private javax.swing.JPanel jPanel2;
     private JPanel panelVisualizacion;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JMenu menuAlgoritmos;

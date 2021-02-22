@@ -212,7 +212,8 @@ public class BurbujaAvanzada implements Algoritmo {
                     semAvance.release(v.length - sigIt - jAct + 1);
                 }else{
                     semAvance.release(v.length - sigIt - jAct + 2);
-                }            }else if(pos>posIt.get(posIt.size()-1)){//la siguiente iteracion no esta guardada por lo que no ponemos en la posicion maxima de nuestra ejecucion y continuamos la ejecuci
+                }
+            }else if(pos>=posIt.get(posIt.size()-1)){//la siguiente iteracion no esta guardada por lo que no ponemos en la posicion maxima de nuestra ejecucion y continuamos la ejecuci
                 while(pos<posMaxima){
                     pos++;
                     for (int i = 0; i < v.length; i++) {
@@ -225,7 +226,8 @@ public class BurbujaAvanzada implements Algoritmo {
                     semAvance.release(v.length - sigIt - jAct + 1);
                 }else{
                     semAvance.release(v.length - sigIt - jAct + 2);
-                }            }else{//la siguiente iteracion esta guardada por lo que buscamos cual es la siguiente it y nos posicionamos alli
+                }
+            }else{//la siguiente iteracion esta guardada por lo que buscamos cual es la siguiente it y nos posicionamos alli
                 int aux=posIt.size()-1;
                 while((pos<posIt.get(aux)) && (pos<posIt.get(aux-1))){
                     aux--;

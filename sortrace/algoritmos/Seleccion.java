@@ -258,7 +258,7 @@ public class Seleccion implements Algoritmo {
                     //System.out.println("[" + v[0] + "," + v[1] + "," + v[2] + "," + v[3] + "," + v[4] + "," + v[5] + "," + v[6] + "," + v[7] + "]");
                 }
                 semAvance.release(v.length - sigIt - jAct+2);
-            } else if (pos > posIt.get(posIt.size() - 1)) {//la siguiente iteracion no esta guardada por lo que no ponemos en la posicion maxima de nuestra ejecucion y continuamos la ejecuci
+            } else if (pos >= posIt.get(posIt.size() - 1)) {//la siguiente iteracion no esta guardada por lo que no ponemos en la posicion maxima de nuestra ejecucion y continuamos la ejecuci
                 while (pos < posMaxima) {
                     pos++;
                     for (int i = 0; i < v.length; i++) {

@@ -27,6 +27,7 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
         this.buttonGroup1.add(jRadioButton2);
         this.buttonGroup1.add(jRadioButton3);
         this.setVisible(true);
+        this.setResizable(false);
     }
 
     /**
@@ -37,6 +38,7 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        error=false;
         buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -52,6 +54,8 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
 
+
+        this.setTitle(Sortrace.getIdioma().getProperty("generarDatosTitulo"));
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         Dimension dim=new Dimension(40,25);
@@ -59,28 +63,28 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
         jTextField2.setPreferredSize(dim);
 
         jLabel1.setFont(new java.awt.Font("DejaVu Sans", Font.BOLD, 14)); // NOI18N
-        jLabel1.setText("Tamaño del vector");
+        jLabel1.setText(Sortrace.getIdioma().getProperty("generarDatosEtiquetaTamaño"));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30" }));
 
         jLabel2.setFont(new java.awt.Font("DejaVu Sans", Font.BOLD, 14)); // NOI18N
-        jLabel2.setText("Intervalo*");
+        jLabel2.setText(Sortrace.getIdioma().getProperty("generarDatosEtiquetaIntervalo"));
 
 
         jLabel3.setText("...");
 
 
         jLabel4.setFont(new java.awt.Font("DejaVu Sans", Font.ITALIC, 12)); // NOI18N
-        jLabel4.setText("Los elementos del vector deben estar entre [-999 ... 999]");
+        jLabel4.setText(Sortrace.getIdioma().getProperty("generarDatosEtiquetaAviso"));
 
-        jButton1.setText("Aceptar");
+        jButton1.setText(Sortrace.getIdioma().getProperty("generarDatosBotonAceptar"));
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton1MouseClicked(evt);
             }
         });
 
-        jButton2.setText("Cancelar");
+        jButton2.setText(Sortrace.getIdioma().getProperty("generarDatosBotonCancelar"));
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton2MouseClicked(evt);
@@ -88,17 +92,17 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
         });
 
         jLabel5.setFont(new java.awt.Font("DejaVu Sans", Font.BOLD, 14)); // NOI18N
-        jLabel5.setText("Orden");
+        jLabel5.setText(Sortrace.getIdioma().getProperty("generarDatosOrden"));
 
         jRadioButton1.setFont(new java.awt.Font("DejaVu Sans", Font.PLAIN, 12)); // NOI18N
         jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Aleatorio");
+        jRadioButton1.setText(Sortrace.getIdioma().getProperty("generarDatosOrdenAleatorio"));
 
         jRadioButton2.setFont(new java.awt.Font("DejaVu Sans", Font.PLAIN, 12)); // NOI18N
-        jRadioButton2.setText("Orden Creciente");
+        jRadioButton2.setText(Sortrace.getIdioma().getProperty("generarDatosOrdenCreciente"));
 
         jRadioButton3.setFont(new java.awt.Font("DejaVu Sans", Font.PLAIN, 12)); // NOI18N
-        jRadioButton3.setText("Orden Decreciente");
+        jRadioButton3.setText(Sortrace.getIdioma().getProperty("generarDatosOrdenDereciente"));
 
         JLabel l1=new JLabel();
         JLabel l2=new JLabel();
@@ -114,67 +118,6 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
         l2.setText("");
         l3.setText("");
         l4.setText("");
-
-        /*this.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridwidth = 3;
-        c.gridheight=1;
-        c.weighty = 1;
-        c.weightx = 1;
-        c.gridx = 0;
-        c.gridy = 0;
-        this.add(l4,c);
-        c.gridx = 0;
-        c.gridy = 1;
-        this.add(jLabel1,c);
-        c.gridx = 0;
-        c.gridy = 2;
-        this.add(jComboBox1,c);
-        c.gridx = 0;
-        c.gridy = 3;
-        this.add(l1,c);
-        c.gridx = 0;
-        c.gridy = 4;
-        this.add(jLabel2,c);
-        c.gridx = 0;
-        c.gridy = 5;
-        c.gridwidth = 1;
-        this.add(jTextField1,c);
-        c.gridx = 2;
-        c.gridy = 5;
-        this.add(jTextField2,c);
-        c.gridx = 1;
-        c.gridy = 5;
-        this.add(jLabel3,c);
-        c.gridx = 0;
-        c.gridy = 6;
-        c.gridwidth = 3;
-        this.add(jLabel4,c);
-        c.gridx = 0;
-        c.gridy = 7;
-        this.add(l2,c);
-        c.gridx = 0;
-        c.gridy = 8;
-        this.add(jLabel5,c);
-        c.gridx = 0;
-        c.gridy = 9;
-        this.add(jRadioButton1,c);
-        c.gridx =0;
-        c.gridy = 10;
-        this.add(jRadioButton2,c);
-        c.gridx =0;
-        c.gridy = 11;
-        this.add(jRadioButton3,c);
-        c.gridx = 0;
-        c.gridy = 12;
-        this.add(l3,c);
-        c.gridx =0;
-        c.gridy = 13;
-        c.gridwidth = 1;
-        this.add(jButton1,c);
-        c.gridx =2;
-        c.gridy = 13;
-        this.add(jButton2,c);*/
 
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -243,9 +186,50 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
         //this.setBounds(0,0,600,800);
         //Dimension d=new Dimension(500,500);
         //this.setPreferredSize(d);
+        if(Sortrace.getConfig().getModo().equals("si")) {
+            jLabel1.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jLabel2.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jLabel3.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jLabel4.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jLabel5.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jButton1.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            jButton1.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jButton2.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            jButton2.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jComboBox1.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            jComboBox1.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jRadioButton1.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jRadioButton1.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            jRadioButton2.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jRadioButton2.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            jRadioButton3.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jRadioButton3.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            this.getContentPane().setBackground(Sortrace.getConfig().getFondoModoOscuro());
+
+        }else{
+            jLabel1.setForeground(UIManager.getColor("JLabel.foreground"));
+            jLabel2.setForeground(UIManager.getColor("JLabel.foreground"));
+            jLabel3.setForeground(UIManager.getColor("JLabel.foreground"));
+            jLabel4.setForeground(UIManager.getColor("JLabel.foreground"));
+            jLabel5.setForeground(UIManager.getColor("JLabel.foreground"));
+            jButton1.setBackground(UIManager.getColor("JButton.background"));
+            jButton1.setForeground(UIManager.getColor("JButton.foreground"));
+            jButton2.setBackground(UIManager.getColor("JButton.background"));
+            jButton2.setForeground(UIManager.getColor("JButton.foreground"));
+            jComboBox1.setBackground(UIManager.getColor("JComboBox.background"));
+            jComboBox1.setForeground(UIManager.getColor("JComboBox.foreground"));
+            jRadioButton1.setForeground(UIManager.getColor("jRadioButton.foreground"));
+            jRadioButton1.setBackground(UIManager.getColor("jRadioButton.background"));
+            jRadioButton2.setForeground(UIManager.getColor("jRadioButton.foreground"));
+            jRadioButton2.setBackground(UIManager.getColor("jRadioButton.background"));
+            jRadioButton3.setForeground(UIManager.getColor("jRadioButton.foreground"));
+            jRadioButton3.setBackground(UIManager.getColor("jRadioButton.background"));
+            this.getContentPane().setBackground(UIManager.getColor("JFrame.background"));
+        }
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonAceptarMouseClicked
+        error=false;
         this.longitud=Integer.parseInt((String)this.jComboBox1.getSelectedItem());
         Vector vector = Sortrace.getVector();
         if(this.jRadioButton1.isSelected()){
@@ -265,22 +249,62 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
             Sortrace.getPantalla().mostrarPanelVisualizacion();
         }
         Sortrace.getPantalla().actualizarBotonesArchivo();
-        this.dispose();
+        if(!error) {
+            JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosMensajeExito"), Sortrace.getIdioma().getProperty("introducirDatosTituloExito"), JOptionPane.INFORMATION_MESSAGE, (Icon) null);
+            this.dispose();
+        }
     }
     private int[] generarNumAleatorios(int longitud) {
         Random random = new Random(System.currentTimeMillis());
         int[] vectorAux = new int[longitud];
         int limSup,limInf;
-        limInf=Integer.parseInt(this.jTextField1.getText());
-        limSup=Integer.parseInt(this.jTextField2.getText());
-        for(int i=0;i<longitud;i++){
-            vectorAux[i] = random.nextInt(limSup - limInf + 1) + limInf;
+        if(this.jTextField1.getText().equals("")){
+            limInf=-999;
+        }else{
+            try {
+                limInf = Integer.parseInt(this.jTextField1.getText());
+            }catch (NumberFormatException var1) {
+                JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosErrorMensajeFormato"), Sortrace.getIdioma().getProperty("introducirDatosErrorTituloFormato"), 0, (Icon) null);
+                error = true;
+                return null;
+            }
+        }
+        if(this.jTextField2.getText().equals("")){
+            limSup=999;
+        }else{
+            try {
+                limSup = Integer.parseInt(this.jTextField2.getText());
+            }catch (NumberFormatException var1) {
+                JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosErrorMensajeFormato"), Sortrace.getIdioma().getProperty("introducirDatosErrorTituloFormato"), 0, (Icon) null);
+                error = true;
+                return null;
+            }
+        }
+
+        if(limInf>=limSup){
+            JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("generarDatosLimitesMensaje"), Sortrace.getIdioma().getProperty("generarDatosLimitesTitulo"), 0, (Icon) null);
+            error = true;
+            return null;
+        }else if(limInf<-999){
+            JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("generarDatosLimiteInferiorMensaje"), Sortrace.getIdioma().getProperty("generarDatosLimiteInferiorTitulo"), 0, (Icon) null);
+            error = true;
+            return null;
+        }else if(limSup>999){
+            JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("generarDatosLimiteSuperiorMensaje"), Sortrace.getIdioma().getProperty("generarDatosLimiteSuperiorTitulo"), 0, (Icon) null);
+            error = true;
+            return null;
+        }else {
+            for (int i = 0; i < longitud; i++) {
+                vectorAux[i] = random.nextInt(limSup - limInf + 1) + limInf;
+            }
         }
         return  vectorAux;
     }
     private int[] generarNumCreciente(int longitud) {
         int[] aux = generarNumAleatorios(longitud);
-        Arrays.sort(aux);
+        if(aux!=null) {
+            Arrays.sort(aux);
+        }
         return aux;
     }
     private int[] generarNumDecreciente(int longitud) {
@@ -347,6 +371,7 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private boolean error;
     private int longitud;
     // End of variables declaration//GEN-END:variables
 }

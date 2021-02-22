@@ -261,7 +261,7 @@ public class Shell implements Algoritmo {
                 }
                 avanzaIt=true;
                 semAvance.release(1);
-            }else if(pos>posIt.get(posIt.size()-1)){//la siguiente iteracion no esta guardada por lo que no ponemos en la posicion maxima de nuestra ejecucion y continuamos la ejecuci
+            }else if(pos>=posIt.get(posIt.size()-1)){//la siguiente iteracion no esta guardada por lo que no ponemos en la posicion maxima de nuestra ejecucion y continuamos la ejecuci
                 while(pos<posMaxima){
                     pos++;
                     for (int i = 0; i < v.length; i++) {

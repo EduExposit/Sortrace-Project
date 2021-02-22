@@ -27,6 +27,7 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
         initComponents();
         if(modificar){
             //this.setBounds(0, 0, 1500, 350);
+            error=false;
             this.panelDatos2 = new sortrace.PanelDatos2(Sortrace.getVector().getSize());
             jLabel2.setVisible(true);
             jLabel1.setVisible(false);
@@ -56,6 +57,7 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
             this.panelDatos2.setVisible(true);
             this.panelDatos2.mostrarNumeros();
         }
+        this.setResizable(false);
 
     }
 
@@ -69,7 +71,7 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
     private void initComponents() {
 
         //panelDatos1 = new sortrace.PanelDatos();
-        this.setTitle("Introducir Datos");
+        this.setTitle(Sortrace.getIdioma().getProperty("introducirDatosTitulo"));
         if(longitud==0) {
             panelDatos2 = new sortrace.PanelDatos2(15);
         }else{
@@ -80,7 +82,6 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
         botonAceptar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
@@ -88,7 +89,7 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
-        jLabel1.setText("Introduzca el tamaño del vector");
+        jLabel1.setText(Sortrace.getIdioma().getProperty("introducirDatosEtiquetaTamano"));
 
         jList1.setModel(new javax.swing.AbstractListModel<Integer>() {
             Integer[] strings = { 1, 2, 3, 4, 5
@@ -130,33 +131,8 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
         jPanel3.add(botonAceptar);
         jPanel3.add(jButton2);
 
-
-        /*javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-            .addGroup(GroupLayout.Alignment.CENTER, jPanel3Layout.createSequentialGroup()
-                .addGap(116, 116, 116)
-                .addComponent(botonAceptar)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                    .addComponent(botonAceptar)
-                    .addComponent(jButton2))
-                .addContainerGap(22, Short.MAX_VALUE))
-        );*/
-        /*this.setLayout(new BorderLayout());
-        this.add(panelDatos1,BorderLayout.CENTER);
-        this.add(jPanel1,BorderLayout.CENTER);
-        this.add(jPanel3,BorderLayout.SOUTH);*/
         jLabel2=new javax.swing.JLabel();
-        jLabel2.setText("Introduzca los datos del vector");
+        jLabel2.setText(Sortrace.getIdioma().getProperty("introducirDatosEtiquetaEntrada"));
         jLabel2.setVisible(false);
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -179,13 +155,13 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
                 //.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3))
         );
-        botonAceptar.setText("Aceptar");
+        botonAceptar.setText(Sortrace.getIdioma().getProperty("introducirDatosBotonAceptar"));
         botonAceptar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonAceptarMouseClicked(evt);
             }
         });
-        jButton2.setText("Cancelar");
+        jButton2.setText(Sortrace.getIdioma().getProperty("introducirDatosBotonCancelar"));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -195,6 +171,37 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
         this.panelDatos2.setVisible(false);
 
         this.setVisible(true);
+
+        if(Sortrace.getConfig().getModo().equals("si")) {
+            botonAceptar.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            botonAceptar.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jButton2.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            jButton2.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jLabel1.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jLabel2.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jList1.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            jList1.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jPanel1.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            jPanel3.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            jScrollPane1.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            jScrollPane1.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            this.getContentPane().setBackground(Sortrace.getConfig().getFondoModoOscuro());
+        }else{
+            botonAceptar.setBackground(UIManager.getColor("JButton.background"));
+            botonAceptar.setForeground(UIManager.getColor("JButton.foreground"));
+            jButton2.setBackground(UIManager.getColor("JButton.background"));
+            jButton2.setForeground(UIManager.getColor("JButton.foreground"));
+            jLabel1.setForeground(UIManager.getColor("JLabel.foreground"));
+            jLabel2.setForeground(UIManager.getColor("JLabel.foreground"));
+            jList1.setBackground(UIManager.getColor ("JList.background"));
+            jList1.setForeground(UIManager.getColor("JList.foreground"));
+            jPanel1.setBackground(UIManager.getColor ("JPanel.background"));
+            jPanel3.setBackground(UIManager.getColor ("JPanel.background"));
+            jScrollPane1.setBackground(UIManager.getColor ("JScrollPane.background"));
+            jScrollPane1.setForeground(UIManager.getColor("jScrollPane.foreground"));
+            this.getContentPane().setBackground(UIManager.getColor("JFrame.background"));
+        }
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -248,7 +255,10 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
                 Sortrace.getPantalla().mostrarPanelVisualizacion();
             }
             Sortrace.getPantalla().actualizarBotonesArchivo();
-            this.dispose();
+            if(!error) {
+                JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosMensajeExito"), Sortrace.getIdioma().getProperty("introducirDatosTituloExito"), JOptionPane.INFORMATION_MESSAGE, (Icon) null);
+                this.dispose();
+            }
         }
 
     }
@@ -257,8 +267,17 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
         int[] vectorAux = new int[this.panelDatos2.getLongitud()];
 
         for(int i = 0; i < vectorAux.length; ++i) {
-            if(!this.panelDatos2.getElementos()[i].getText().equals(""))
-            vectorAux[i] = Integer.valueOf(this.panelDatos2.getElementos()[i].getText());
+            if(!this.panelDatos2.getElementos()[i].getText().equals("")) {
+                try {
+                    vectorAux[i] = Integer.valueOf(this.panelDatos2.getElementos()[i].getText());
+                } catch (NumberFormatException var1) {
+                    JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosErrorMensajeFormato"), Sortrace.getIdioma().getProperty("introducirDatosErrorTituloFormato"), 0, (Icon) null);
+                    error = true;
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosErrorMensajeFormato"), Sortrace.getIdioma().getProperty("introducirDatosErrorTituloFormato"), 0, (Icon) null);
+                error = true;
+            }
         }
 
         vector.setVector(vectorAux);
@@ -308,10 +327,10 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
     private javax.swing.JList<Integer> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private sortrace.PanelDatos panelDatos1;
+    //private sortrace.PanelDatos panelDatos1;
     private sortrace.PanelDatos2 panelDatos2;
+    private boolean error;
     // End of variables declaration//GEN-END:variables
     private int longitud=0;
     private int desplazado=0;

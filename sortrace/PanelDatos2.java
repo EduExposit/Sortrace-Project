@@ -38,9 +38,9 @@ public class PanelDatos2 extends javax.swing.JPanel {
             elementos[i]=new javax.swing.JTextField();
             elementos[i].setPreferredSize(dim);
         }
-        jLabel2.setText("Posicion");
-        jLabel3.setText("Elemento");
-        jLabel1.setText("Introduzca los datos de entrada del vector");
+        jLabel2.setText(Sortrace.getIdioma().getProperty("introducirDatosPosicion"));
+        jLabel3.setText(Sortrace.getIdioma().getProperty("introducirDatosElemento"));
+        jLabel1.setText(Sortrace.getIdioma().getProperty("introducirDatosEtiquetaEntrada"));
         //this.setLayout(new GridLayout(2,17));
         this.setLayout(new GridBagLayout());
         jLabel1.setHorizontalAlignment(JLabel.CENTER);
@@ -73,6 +73,23 @@ public class PanelDatos2 extends javax.swing.JPanel {
         for(int i=0;i<longitud;i++) {
             c.gridx = i+1;
             this.add(elementos[i],c);
+        }
+        if(Sortrace.getConfig().getModo().equals("si")) {
+            jLabel1.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jLabel2.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            jLabel3.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            for(int i=0;i<posiciones.length;i++) {
+                posiciones[i].setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            }
+            this.setBackground(Sortrace.getConfig().getFondoModoOscuro());
+        }else{
+            jLabel1.setForeground(UIManager.getColor("JLabel.foreground"));
+            jLabel2.setForeground(UIManager.getColor("JLabel.foreground"));
+            jLabel3.setForeground(UIManager.getColor("JLabel.foreground"));
+            for(int i=0;i<posiciones.length;i++) {
+                posiciones[i].setForeground(UIManager.getColor("JLabel.foreground"));
+            }
+            this.setBackground(UIManager.getColor("JPanel.background"));
         }
     }
     public int getLongitud() {

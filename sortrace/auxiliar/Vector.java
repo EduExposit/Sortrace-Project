@@ -19,8 +19,10 @@ public class Vector implements Serializable {
         return this.size==0;
     }
     public void setVector(int[] vector) {
-        this.vector = Arrays.copyOf(vector, vector.length);
-        this.size=vector.length;
+            if (vector!=null) {
+                this.vector = Arrays.copyOf(vector, vector.length);
+                this.size = vector.length;
+            }
     }
 
     public int getSize() {
