@@ -148,7 +148,9 @@ public class Visualizacion extends javax.swing.JFrame {
             Sortrace.getConfig().setColorAsignacion(colorNew);
             Sortrace.getConfig().modificarAjustesVisualizacion();
             botonColorAsignacion.setBackground(colorNew);
+            Sortrace.getConfig().setColorAsignacion(colorNew);
         }
+        Sortrace.getConfig().modificarAjustesVisualizacion();
     }
     private void botonColorComparacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonAceptarMouseClicked
         Color colorAnt = Sortrace.getConfig().getColorComparacion();
@@ -157,7 +159,10 @@ public class Visualizacion extends javax.swing.JFrame {
             Sortrace.getConfig().setColorComparacion(colorNew);
             Sortrace.getConfig().modificarAjustesVisualizacion();
             botonColorComparacion.setBackground(colorNew);
+            Sortrace.getConfig().setColorComparacion(colorNew);
         }
+        Sortrace.getConfig().modificarAjustesVisualizacion();
+
     }
     private void botonColorFijadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonAceptarMouseClicked
         Color colorAnt = Sortrace.getConfig().getColorAsignacion();
@@ -165,8 +170,11 @@ public class Visualizacion extends javax.swing.JFrame {
         if(colorNew!=null){
             Sortrace.getConfig().setColorAsignacion(colorNew);
             Sortrace.getConfig().modificarAjustesVisualizacion();
-            botonColorAsignacion.setBackground(colorNew);
+            botonColorFijado.setBackground(colorNew);
+            Sortrace.getConfig().setColorFijado(colorNew);
         }
+        Sortrace.getConfig().modificarAjustesVisualizacion();
+
     }
     private void botonModoOscuroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonAceptarMouseClicked
         if(Sortrace.getConfig().getModo().equals("si")) {
@@ -192,6 +200,7 @@ public class Visualizacion extends javax.swing.JFrame {
             botonModoOscuro.setForeground(Sortrace.getConfig().getTextoModoOscuro());
             Sortrace.getPantalla().actualizarModo();
         }
+        Sortrace.getConfig().modificarAjustesVisualizacion();
     }
 
 

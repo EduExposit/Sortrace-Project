@@ -64,6 +64,7 @@ public class BurbujaAvanzada implements Algoritmo {
                         try {
                             if(continuo==true){
                                 Sortrace.getPantalla().mostrarPanelVisualizacion();
+                                Sortrace.getPantalla().añadirFotoSecuencia();
                                 sleep(1000);
                             }
                             semAvance.acquire();
@@ -91,6 +92,7 @@ public class BurbujaAvanzada implements Algoritmo {
                                 try {
                                     if(continuo==true){
                                         Sortrace.getPantalla().mostrarPanelVisualizacion();
+                                        Sortrace.getPantalla().añadirFotoSecuencia();
                                         sleep(1000);
                                     }
                                     isAsing=true;
@@ -123,11 +125,13 @@ public class BurbujaAvanzada implements Algoritmo {
                     }
                     if(avanzait=true){
                         Sortrace.getPantalla().mostrarPanelVisualizacion();
+                        Sortrace.getPantalla().añadirFotoSecuencia();
                     }
                     avanzait=false;
                     try {
                         if(continuo==true){
                             Sortrace.getPantalla().mostrarPanelVisualizacion();
+                            Sortrace.getPantalla().añadirFotoSecuencia();
                             sleep(1000);
                         }
                         semAvance.acquire();
@@ -164,6 +168,7 @@ public class BurbujaAvanzada implements Algoritmo {
                         configPos.add(c3);
                         if(continuo==true){
                             Sortrace.getPantalla().mostrarPanelVisualizacion();
+                            Sortrace.getPantalla().añadirFotoSecuencia();
                         }
                     }
                     jAct=0;
@@ -325,6 +330,7 @@ public class BurbujaAvanzada implements Algoritmo {
 
                     pos++;
                     Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
                     for (int i = 0; i < v.length; i++) {
                         //v[i] = posiciones.get(pos)[i];
                         v[i] = configPos.get(pos).getVector()[i];
@@ -360,6 +366,7 @@ public class BurbujaAvanzada implements Algoritmo {
 
                     pos--;
                     Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
                     for (int i = 0; i < v.length; i++) {
                         //v[i] = posiciones.get(pos)[i];
                         v[i] = configPos.get(pos).getVector()[i];

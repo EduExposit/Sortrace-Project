@@ -9,7 +9,12 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import javax.imageio.ImageIO;
+import java.util.ArrayList;
+import javax.imageio.*;
+import javax.imageio.metadata.IIOInvalidTreeException;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.metadata.IIOMetadataNode;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.TabbedPaneUI;
@@ -174,7 +179,11 @@ public class Pantalla extends javax.swing.JFrame {
         boton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         boton7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                boton7MouseClicked(evt);
+                try {
+                    boton7MouseClicked(evt);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         jToolBar1.add(boton7);
@@ -944,6 +953,7 @@ public class Pantalla extends javax.swing.JFrame {
         }else if(boton2.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionRetrocederComienzo"))){
             Sortrace.getAlgoritmo().retrocederComienzo();
             this.mostrarPanelVisualizacion();
+            this.añadirFotoSecuencia();
             boton1.setEnabled(false);
             boton2.setEnabled(true);
             boton3.setEnabled(true);
@@ -1087,6 +1097,7 @@ public class Pantalla extends javax.swing.JFrame {
         }else if(boton3.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionRetrocederIteracion"))){
             Sortrace.getAlgoritmo().retrocederIteracion();
             this.mostrarPanelVisualizacion();
+            this.añadirFotoSecuencia();
             boton1.setEnabled(false);
             boton2.setEnabled(true);
             boton3.setEnabled(true);
@@ -1098,6 +1109,8 @@ public class Pantalla extends javax.swing.JFrame {
             boton9.setEnabled(true);
             boton10.setEnabled(true);
             actualizarBotonesEjecucion();
+        }else if(boton3.getToolTipText().equals(Sortrace.getIdioma().getProperty("configuracionAnimacion"))) {
+            new Animacion();
         }
     }
 
@@ -1167,6 +1180,7 @@ public class Pantalla extends javax.swing.JFrame {
         }else if(boton4.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionRetrocederPaso"))){
             Sortrace.getAlgoritmo().retrocederPaso();
             this.mostrarPanelVisualizacion();
+            this.añadirFotoSecuencia();
             boton1.setEnabled(false);
             boton2.setEnabled(true);
             boton3.setEnabled(true);
@@ -1373,8 +1387,8 @@ public class Pantalla extends javax.swing.JFrame {
                                 ImageIO.write(imagen, "PNG", new File(nombreFicheroCompleto));
                             }
 
-                            String messageOK = "\"" + nombreFichero + "\" " + Sortrace.getIdioma().getProperty("exitoGuardar");
-                            JOptionPane.showMessageDialog(this, messageOK, Sortrace.getIdioma().getProperty("tituloExitoGuardar"), 1, (Icon)null);
+                            String messageOK = "\"" + nombreFichero + "\" " + Sortrace.getIdioma().getProperty("guardarExito");
+                            JOptionPane.showMessageDialog(this, messageOK, Sortrace.getIdioma().getProperty("guardarExitoTitulo"), 1, (Icon)null);
                         }
                     }
                 } catch (IOException var11) {
@@ -1383,9 +1397,9 @@ public class Pantalla extends javax.swing.JFrame {
             }
         }
     }
-    private void boton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton4MouseClicked
+    private void boton7MouseClicked(java.awt.event.MouseEvent evt) throws IOException {//GEN-FIRST:event_boton4MouseClicked
         // TODO add your handling code here:
-        if(boton7.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionAvanzarPaso"))){
+        if (boton7.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionAvanzarPaso"))) {
             Sortrace.getAlgoritmo().avanzarPaso();
             try {
                 sleep(200);
@@ -1393,6 +1407,7 @@ public class Pantalla extends javax.swing.JFrame {
                 e.printStackTrace();
             }
             this.mostrarPanelVisualizacion();
+            this.añadirFotoSecuencia();
             boton1.setEnabled(false);
             boton2.setEnabled(true);
             boton3.setEnabled(true);
@@ -1404,8 +1419,59 @@ public class Pantalla extends javax.swing.JFrame {
             boton9.setEnabled(true);
             boton10.setEnabled(true);
             actualizarBotonesEjecucion();
+        } else if (boton7.getToolTipText().equals(Sortrace.getIdioma().getProperty("archivoExportarSecuencia"))) {
+            int cont = 1;
+            JFileChooser panelFileSelector = new JFileChooser();
+            FileNameExtensionFilter filtroPNG = new FileNameExtensionFilter(".png", "png");
+            FileNameExtensionFilter filtroJPG = new FileNameExtensionFilter(".jpg", "jpg");
+            panelFileSelector.addChoosableFileFilter(filtroPNG);
+            panelFileSelector.addChoosableFileFilter(filtroJPG);
+            panelFileSelector.setFileFilter(filtroJPG);
+            panelFileSelector.setAcceptAllFileFilterUsed(false);
+            panelFileSelector.setFileSelectionMode(1);
+            String dir = "C:\\";
+            if (dir != null) {
+                panelFileSelector.setCurrentDirectory(new File(dir));
+            }
+
+            int aceptarExportarImagen = panelFileSelector.showSaveDialog(this);
+            if (aceptarExportarImagen == 0) {
+                File carpetaDestino = panelFileSelector.getSelectedFile().getAbsoluteFile();
+
+                try {
+                    String extension = panelFileSelector.getFileFilter().getDescription();
+                    if (panelFileSelector.getFileFilter() != null) {
+                        if (!carpetaDestino.exists() && !carpetaDestino.mkdir()) {
+                            throw new IOException();
+                        }
+                        for (BufferedImage i : imagenes) {
+                            if (extension.equals(".jpg")) {
+                                try {
+                                    ImageIO.write(i, "JPG", new File(carpetaDestino.getAbsolutePath() + File.separator + "imagen" + cont + extension));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                cont++;
+                            } else {
+                                try {
+                                    ImageIO.write(i, "PNG", new File(carpetaDestino.getAbsolutePath() + File.separator + "imagen" + cont + extension));
+                                } catch (IOException e) {
+                                        e.printStackTrace();
+                                }
+                                cont++;
+                            }
+                        }
+                        JOptionPane.showMessageDialog(this, "guardarExito", Sortrace.getIdioma().getProperty("guardarExitoTitulo"), 1, (Icon) null);
+                    }else {
+                        JOptionPane.showMessageDialog(this,"errorExtensionFichero", Sortrace.getIdioma().getProperty("tituloErrorExtensionImagenes"), 0, (Icon)null);
+                    }
+                }catch (IOException var8) {
+                    JOptionPane.showMessageDialog(this, "errorMensajeIOExceptionGuardar", Sortrace.getIdioma().getProperty("errorTituloIOExceptionGuardar"), 0, (Icon)null);
+                }
+            }
         }
     }
+
     private void boton8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton4MouseClicked
         // TODO add your handling code here:
         if(boton8.getToolTipText().equals(Sortrace.getIdioma().getProperty("ejecucionAvanzarIteracion"))){
@@ -1416,6 +1482,7 @@ public class Pantalla extends javax.swing.JFrame {
                 e.printStackTrace();
             }
             this.mostrarPanelVisualizacion();
+            this.añadirFotoSecuencia();
             boton1.setEnabled(false);
             boton2.setEnabled(true);
             boton3.setEnabled(true);
@@ -1427,6 +1494,43 @@ public class Pantalla extends javax.swing.JFrame {
             boton9.setEnabled(true);
             boton10.setEnabled(true);
             actualizarBotonesEjecucion();
+        }else if (boton8.getToolTipText().equals(Sortrace.getIdioma().getProperty("archivoExportarAnimacion"))) {
+            int cont = 1;
+            JFileChooser panelFileSelector = new JFileChooser();
+            FileNameExtensionFilter filtroGIF = new FileNameExtensionFilter(".gif", "gif");
+            panelFileSelector.addChoosableFileFilter(filtroGIF);
+            panelFileSelector.setFileFilter(filtroGIF);
+            panelFileSelector.setAcceptAllFileFilterUsed(false);
+            String dir = "C:\\";
+            if (dir != null) {
+                panelFileSelector.setCurrentDirectory(new File(dir));
+            }
+
+            int aceptarExportarGIF = panelFileSelector.showSaveDialog(this);
+            if (aceptarExportarGIF == 0) {
+                File file = panelFileSelector.getSelectedFile().getAbsoluteFile();
+                String nombreGIF = file.getName();
+                String nombreGIFCompleto = file.getAbsolutePath();
+
+                try {
+                    if (panelFileSelector.getFileFilter() == null && !file.getName().toLowerCase().endsWith(".gif")) {
+                        JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorExtensionFichero"), Sortrace.getIdioma().getProperty("tituloErrorExtensionImagen"), 0, (Icon)null);
+                    } else {
+                        String extension = panelFileSelector.getFileFilter().getDescription();
+                        if (!file.getName().toLowerCase().endsWith(extension)) {
+                            nombreGIFCompleto = nombreGIFCompleto + extension;
+                            nombreGIF = nombreGIF + extension;
+                        }
+
+                        if (!file.exists() || this.sobrescribirArchivo()) {
+                            exportarAnimacion(new File(nombreGIFCompleto), 200, BufferedImage.TYPE_4BYTE_ABGR,true);
+                            JOptionPane.showMessageDialog(this, nombreGIF+" "+Sortrace.getIdioma().getProperty("guardarExito"), Sortrace.getIdioma().getProperty("guardarExitoTitulo"), 1, (Icon)null);
+                        }
+                    }
+                } catch (IOException var10) {
+                    JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("errorMensajeIOExceptionGuardar") + nombreGIF, Sortrace.getIdioma().getProperty("errorTituloIOExceptionGuardar"), 0, (Icon)null);
+                }
+            }
         }
     }
     private void boton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton9MouseClicked
@@ -1440,6 +1544,7 @@ public class Pantalla extends javax.swing.JFrame {
                 e.printStackTrace();
             }
             this.mostrarPanelVisualizacion();
+            this.añadirFotoSecuencia();
             boton1.setEnabled(false);
             boton2.setEnabled(true);
             boton3.setEnabled(true);
@@ -1520,6 +1625,56 @@ public class Pantalla extends javax.swing.JFrame {
             boton10.setEnabled(true);
         }
     }
+
+    private void exportarAnimacion(File file, int delay, int imageType, boolean loop) throws IOException {
+        ImageWriter writer = ImageIO.getImageWritersBySuffix("gif").next();
+        ImageOutputStream ios = ImageIO.createImageOutputStream(file);
+        ImageWriteParam params = writer.getDefaultWriteParam();
+        ImageTypeSpecifier imageTypeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(imageType);
+        IIOMetadata metadata = writer.getDefaultImageMetadata(imageTypeSpecifier, params);
+
+        String metaFormatName = metadata.getNativeMetadataFormatName();
+        IIOMetadataNode root = (IIOMetadataNode) metadata.getAsTree(metaFormatName);
+        //config metadata
+        IIOMetadataNode graphicsControlExtensionNode = getNodeMetadata(root, "GraphicControlExtension");
+        graphicsControlExtensionNode.setAttribute("disposalMethod", "none");
+        graphicsControlExtensionNode.setAttribute("userInputFlag", "FALSE");
+        graphicsControlExtensionNode.setAttribute("transparentColorFlag", "FALSE");
+        graphicsControlExtensionNode.setAttribute("delayTime", Integer.toString(delay / 10));
+        graphicsControlExtensionNode.setAttribute("transparentColorIndex", "0");
+
+        IIOMetadataNode appExtensionsNode = getNodeMetadata(root, "ApplicationExtensions");
+        IIOMetadataNode child = new IIOMetadataNode("ApplicationExtension");
+        child.setAttribute("applicationID", "NETSCAPE");
+        child.setAttribute("authenticationCode", "2.0");
+
+        int loopContinuously = loop ? 0 : 1;
+        child.setUserObject(new byte[]{0x1, (byte) (loopContinuously & 0xFF), (byte) ((loopContinuously >> 8) & 0xFF)});
+        appExtensionsNode.appendChild(child);
+        metadata.setFromTree(metaFormatName, root);
+        //fin config metadata
+        writer.setOutput(ios);
+        writer.prepareWriteSequence(null);
+
+        for(BufferedImage imagen:imagenes){
+            writer.writeToSequence(new IIOImage(imagen, null, metadata), params);
+        }
+        writer.endWriteSequence();
+        ios.close();
+    }
+
+    private static IIOMetadataNode getNodeMetadata(IIOMetadataNode rootNode, String nodeName) {
+        int nNodes = rootNode.getLength();
+        for (int i = 0; i < nNodes; i++) {
+            if (rootNode.item(i).getNodeName().equalsIgnoreCase(nodeName)) {
+                return (IIOMetadataNode) rootNode.item(i);
+            }
+        }
+        IIOMetadataNode node = new IIOMetadataNode(nodeName);
+        rootNode.appendChild(node);
+        return (node);
+    }
+
     private boolean sobrescribirArchivo() {
         Object[] options = new Object[]{"Aceptar", "Cancelar"};
         int opcion = JOptionPane.showOptionDialog(this, "sobrescribirArchivo", "tituloGuardar", -1, 2, (Icon)null, options, options[0]);
@@ -1976,6 +2131,16 @@ public class Pantalla extends javax.swing.JFrame {
             //vistaVector;
         }
     }
+    public void añadirFotoSecuencia(){
+        if (Sortrace.getAlgoritmo().IsComienzo()){
+            imagenes= new ArrayList<>();
+        }else{
+            BufferedImage imagen = new BufferedImage(vistaVector.getWidth()*2/3, vistaVector.getHeight(), 1);
+            Graphics g = imagen.getGraphics();
+            vistaVector.paint(g);
+            imagenes.add(imagen);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -2044,6 +2209,7 @@ public class Pantalla extends javax.swing.JFrame {
     private javax.swing.JTextPane panelTexto2;
     private VistaVector vistaVector;
     private Dimension dimPred;
+    private ArrayList<BufferedImage> imagenes= new ArrayList<>();
     // End of variables declaration//GEN-END:variables
     private IntroducirNumeros_IU intNum;
 }

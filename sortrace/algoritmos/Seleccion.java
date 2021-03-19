@@ -15,7 +15,7 @@ public class Seleccion implements Algoritmo {
     int posFinal=-1;
     int sigIt;
     int jAct;
-    boolean continuo=false;
+    boolean continuo=false, avanzaIt=false;
     Semaphore semAvance;
     Semaphore semContinuo;
     ArrayList<Integer> posIt;
@@ -102,9 +102,12 @@ public class Seleccion implements Algoritmo {
                         try {
                             if(continuo==true){
                                 Sortrace.getPantalla().mostrarPanelVisualizacion();
+                                Sortrace.getPantalla().añadirFotoSecuencia();
                                 sleep(1000);
                             }
-                            semAvance.acquire();
+                            if(!avanzaIt) {
+                                semAvance.acquire();
+                            }
                             //comparados.clear();
                             //comparados.add(i);
                         } catch (InterruptedException e) {
@@ -138,9 +141,12 @@ public class Seleccion implements Algoritmo {
                     try {
                         if(continuo==true){
                             Sortrace.getPantalla().mostrarPanelVisualizacion();
+                            Sortrace.getPantalla().añadirFotoSecuencia();
                             sleep(1000);
                         }
-                        semAvance.acquire();//+1
+                        if(!avanzaIt) {
+                            semAvance.acquire();
+                        }
                         //comparados.clear();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -163,9 +169,12 @@ public class Seleccion implements Algoritmo {
                     try {
                         if(continuo==true){
                             Sortrace.getPantalla().mostrarPanelVisualizacion();
+                            Sortrace.getPantalla().añadirFotoSecuencia();
                             sleep(1000);
                         }
-                        semAvance.acquire();//+1
+                        if(!avanzaIt) {
+                            semAvance.acquire();
+                        }
                         //intercambio.clear();
 
                     } catch (InterruptedException e) {
@@ -194,11 +203,12 @@ public class Seleccion implements Algoritmo {
                     jAct=0;
                     posIt.add(markIt);
                     //System.out.println("["+w[0]+","+w[1]+","+w[2]+","+w[3]+","+w[4]+","+w[5]+","+w[6]+","+w[7]+"]");
-
+                    avanzaIt=false;
                 }
                 try {
                     if(continuo==true){
                         Sortrace.getPantalla().mostrarPanelVisualizacion();
+                        Sortrace.getPantalla().añadirFotoSecuencia();
                         sleep(1000);
                     }
                     semAvance.acquire();//+1
@@ -217,6 +227,7 @@ public class Seleccion implements Algoritmo {
                     configPos.add(c4);
                     if(continuo==true) {
                         Sortrace.getPantalla().mostrarPanelVisualizacion();
+                        Sortrace.getPantalla().añadirFotoSecuencia();
                     }
                     posIt.add(markIt);
                     //fijados.add(v.length-1);
@@ -246,7 +257,8 @@ public class Seleccion implements Algoritmo {
     @Override
     public void avanzarIteracion() {
         if(pos==posMaxima) {//el vector esta sincronizado con el programa (ejecucion normal)
-            semAvance.release(v.length - sigIt-jAct+2);
+            avanzaIt=true;
+            semAvance.release(1);
         }else {//el programa no esta sincronizado por p que avanzamos en el registro de pos guardado
             if (posIt.size() == 1) {//solo esta guardad la iteracion 0
                 while (pos < posMaxima) {
@@ -257,7 +269,8 @@ public class Seleccion implements Algoritmo {
                     }
                     //System.out.println("[" + v[0] + "," + v[1] + "," + v[2] + "," + v[3] + "," + v[4] + "," + v[5] + "," + v[6] + "," + v[7] + "]");
                 }
-                semAvance.release(v.length - sigIt - jAct+2);
+                avanzaIt=true;
+                semAvance.release(1);
             } else if (pos >= posIt.get(posIt.size() - 1)) {//la siguiente iteracion no esta guardada por lo que no ponemos en la posicion maxima de nuestra ejecucion y continuamos la ejecuci
                 while (pos < posMaxima) {
                     pos++;
@@ -267,7 +280,8 @@ public class Seleccion implements Algoritmo {
                     }
                     //System.out.println("[" + v[0] + "," + v[1] + "," + v[2] + "," + v[3] + "," + v[4] + "," + v[5] + "," + v[6] + "," + v[7] + "]");
                 }
-                semAvance.release(v.length - sigIt - jAct+2);
+                avanzaIt=true;
+                semAvance.release(1);
             } else {//la siguiente iteracion esta guardada por lo que buscamos cual es la siguiente it y nos posicionamos alli
                 int aux = posIt.size() - 1;
                 while ((pos < posIt.get(aux)) && (pos < posIt.get(aux - 1))) {
@@ -374,6 +388,7 @@ public class Seleccion implements Algoritmo {
                     
                     pos++;
                     Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
                     for (int i = 0; i < v.length; i++) {
                         //v[i] = posiciones.get(pos)[i];
                         v[i] = configPos.get(pos).getVector()[i];
@@ -409,6 +424,7 @@ public class Seleccion implements Algoritmo {
                    
                     pos--;
                     Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
                     for (int i = 0; i < v.length; i++) {
                         //v[i] = posiciones.get(pos)[i];
                         v[i] = configPos.get(pos).getVector()[i];
@@ -505,4 +521,5 @@ public class Seleccion implements Algoritmo {
         posIt=new ArrayList<>();
         configPos=new ArrayList<>();
     }
+
 }

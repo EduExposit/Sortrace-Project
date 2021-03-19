@@ -108,6 +108,7 @@ public class Insercion implements Algoritmo {
                         try {
                             if(continuo==true){
                                 Sortrace.getPantalla().mostrarPanelVisualizacion();
+                                Sortrace.getPantalla().añadirFotoSecuencia();
                                 sleep(1000);
                             }
                             if(!avanzaIt) {
@@ -133,6 +134,7 @@ public class Insercion implements Algoritmo {
                             try {
                                 if(continuo==true){
                                     Sortrace.getPantalla().mostrarPanelVisualizacion();
+                                    Sortrace.getPantalla().añadirFotoSecuencia();
                                     sleep(1000);
                                 }
                                 if(!avanzaIt) {
@@ -174,6 +176,7 @@ public class Insercion implements Algoritmo {
                             try {
                                 if(continuo==true){
                                     Sortrace.getPantalla().mostrarPanelVisualizacion();
+                                    Sortrace.getPantalla().añadirFotoSecuencia();
                                     sleep(1000);
                                 }
                                 if(!avanzaIt) {
@@ -202,6 +205,7 @@ public class Insercion implements Algoritmo {
                             try {
                                 if(continuo==true){
                                     Sortrace.getPantalla().mostrarPanelVisualizacion();
+                                    Sortrace.getPantalla().añadirFotoSecuencia();
                                     sleep(1000);
                                 }
                                 if(!avanzaIt) {
@@ -244,6 +248,7 @@ public class Insercion implements Algoritmo {
                             try {
                                 if(continuo==true){
                                     Sortrace.getPantalla().mostrarPanelVisualizacion();
+                                    Sortrace.getPantalla().añadirFotoSecuencia();
                                     sleep(1000);
                                 }
                                 if(!avanzaIt) {
@@ -308,7 +313,7 @@ public class Insercion implements Algoritmo {
                     System.out.println("["+v[0]+","+v[1]+","+v[2]+","+v[3]+","+v[4]+","+v[5]+","+v[6]+","+v[7]+"]");
                 }
                 avanzaIt=true;
-                semAvance.release(jAct);
+                semAvance.release(1);
             }else if(pos>=posIt.get(posIt.size()-1)){//la siguiente iteracion no esta guardada por lo que no ponemos en la posicion maxima de nuestra ejecucion y continuamos la ejecuci
                 while(pos<posMaxima){
                     pos++;
@@ -417,6 +422,7 @@ public class Insercion implements Algoritmo {
 
                     pos++;
                     Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
                     for (int i = 0; i < v.length; i++) {
                         //v[i] = posiciones.get(pos)[i];
                         v[i] = configPos.get(pos).getVector()[i];
@@ -452,6 +458,7 @@ public class Insercion implements Algoritmo {
 
                     pos--;
                     Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
                     for (int i = 0; i < v.length; i++) {
                         //v[i] = posiciones.get(pos)[i];
                         v[i] = configPos.get(pos).getVector()[i];
