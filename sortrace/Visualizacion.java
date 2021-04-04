@@ -26,6 +26,7 @@ public class Visualizacion extends javax.swing.JFrame {
     public Visualizacion() {
         initComponents();
         this.setResizable(false);
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -40,8 +41,9 @@ public class Visualizacion extends javax.swing.JFrame {
         textoColorComparacion = new javax.swing.JLabel();
         textoColorFijado = new javax.swing.JLabel();
         textoModoOscuro = new javax.swing.JLabel();
-
+        textoEncabezamiento = new javax.swing.JLabel();
         panel = new javax.swing.JPanel();
+         panelF = new javax.swing.JPanel();
 
         botonColorAsignacion = new javax.swing.JButton();
         botonColorComparacion = new javax.swing.JButton();
@@ -51,14 +53,18 @@ public class Visualizacion extends javax.swing.JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        textoColorAsignacion.setFont(new java.awt.Font("DejaVu Sans", Font.BOLD, 14)); // NOI18N
+        this.setTitle(Sortrace.getIdioma().getProperty("tituloVisualizacion"));
+
+        textoColorAsignacion.setFont(new java.awt.Font("DejaVu Sans", Font.PLAIN, 12)); // NOI18N
         textoColorAsignacion.setText(Sortrace.getIdioma().getProperty("visualizacionTextoColorAsignacion"));
-        textoColorComparacion.setFont(new java.awt.Font("DejaVu Sans", Font.BOLD, 14)); // NOI18N
+        textoColorComparacion.setFont(new java.awt.Font("DejaVu Sans", Font.PLAIN, 12)); // NOI18N
         textoColorComparacion.setText(Sortrace.getIdioma().getProperty("visualizacionTextoColorComparacion"));
-        textoColorFijado.setFont(new java.awt.Font("DejaVu Sans", Font.BOLD, 14)); // NOI18N
+        textoColorFijado.setFont(new java.awt.Font("DejaVu Sans", Font.PLAIN, 12)); // NOI18N
         textoColorFijado.setText(Sortrace.getIdioma().getProperty("visualizacionTextoColorFijado"));
-        textoModoOscuro.setFont(new java.awt.Font("DejaVu Sans", Font.BOLD, 14)); // NOI18N
+        textoModoOscuro.setFont(new java.awt.Font("DejaVu Sans", Font.PLAIN, 12)); // NOI18N
         textoModoOscuro.setText(Sortrace.getIdioma().getProperty("visualizacionTextoModoOscuro"));
+        textoEncabezamiento.setFont(new java.awt.Font("DejaVu Sans", Font.PLAIN, 14)); // NOI18N
+        textoEncabezamiento.setText(Sortrace.getIdioma().getProperty("encabezamientoVisualizacion"));
 
         botonColorAsignacion.setText("");
         botonColorAsignacion.setBackground(Sortrace.getConfig().getColorAsignacion());
@@ -90,26 +96,35 @@ public class Visualizacion extends javax.swing.JFrame {
         if(Sortrace.getConfig().getModo().equals("si")) {
             botonModoOscuro.setText("Desactivar");
             panel.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            panelF.setBackground(Sortrace.getConfig().getPanelModoOscuro());
             textoModoOscuro.setForeground(Sortrace.getConfig().getTextoModoOscuro());
             textoColorComparacion.setForeground(Sortrace.getConfig().getTextoModoOscuro());
             textoColorAsignacion.setForeground(Sortrace.getConfig().getTextoModoOscuro());
             textoColorFijado.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            textoEncabezamiento.setForeground(Sortrace.getConfig().getTextoModoOscuro());
             botonModoOscuro.setBackground(Sortrace.getConfig().getBotonModoOscuro());
             botonModoOscuro.setForeground(Sortrace.getConfig().getTextoModoOscuro());
         }else{
             botonModoOscuro.setText("Activar");
-            panel.setBackground(UIManager.getColor ("Panel.background"));
+            panel.setBackground(UIManager.getColor ( "Panel.background" ));
+            panelF.setBackground(UIManager.getColor ( "Panel.background" ));
             textoModoOscuro.setForeground(UIManager.getColor("JLabel.background"));
             textoColorComparacion.setForeground(UIManager.getColor("JLabel.foreground"));
             textoColorAsignacion.setForeground(UIManager.getColor("JLabel.foreground"));
             textoColorFijado.setForeground(UIManager.getColor("JLabel.foreground"));
+            textoEncabezamiento.setForeground(UIManager.getColor("JLabel.foreground"));
             botonModoOscuro.setBackground(UIManager.getColor("JButton.background"));
             botonModoOscuro.setForeground(UIManager.getColor("JButton.foreground"));
         }
-        botonColorAsignacion.setPreferredSize(new Dimension(40, 40));
-        botonColorComparacion.setPreferredSize(new Dimension(40, 40));
-        botonColorFijado.setPreferredSize(new Dimension(40, 40));
-        botonModoOscuro.setPreferredSize(new Dimension(40, 40));
+        botonColorAsignacion.setPreferredSize(new Dimension(30, 30));
+        botonColorComparacion.setPreferredSize(new Dimension(30, 30));
+        botonColorFijado.setPreferredSize(new Dimension(30, 30));
+        //botonModoOscuro.setPreferredSize(new Dimension(40, 40));
+
+        botonColorAsignacion.setMinimumSize(new Dimension(30, 30));
+        botonColorComparacion.setMinimumSize(new Dimension(30, 30));
+        botonColorFijado.setMinimumSize(new Dimension(30, 30));
+        //botonModoOscuro.setMinimumSize(new Dimension(40, 40));
 
         /*panel.setLayout(new FlowLayout());
         panel.add(textoColorAsignacion);
@@ -121,7 +136,8 @@ public class Visualizacion extends javax.swing.JFrame {
         panel.add(textoModoOscuro);
         panel.add(botonModoOscuro);
         this.add(panel);*/
-        GridLayout gridLayout=new GridLayout();
+
+        /*GridLayout gridLayout=new GridLayout();
         gridLayout.setRows(4);
         gridLayout.setHgap(10);
         gridLayout.setColumns(2);
@@ -135,8 +151,46 @@ public class Visualizacion extends javax.swing.JFrame {
         panel.add(botonColorFijado);
         panel.add(textoModoOscuro);
         panel.add(botonModoOscuro);
-        this.add(panel);
+        this.add(panel);*/
+        panelF.setLayout(new FlowLayout());
+        ImageIcon imagen=new ImageIcon(getClass().getResource("/util/icon/Visualizacion.png"));
+        JLabel im = new JLabel();
+        im.setIcon(imagen);
 
+        panelF.add(im);
+        panelF.add(textoEncabezamiento);
+
+        GroupLayout layout = new GroupLayout(panel);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+        panel.setLayout(layout);
+
+        // Set for horizontal and vertical group
+        layout.setHorizontalGroup(layout.createSequentialGroup().addGap(30)
+                .addGroup(layout.createSequentialGroup().addGroup(layout
+                .createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(textoColorComparacion).addComponent(textoColorAsignacion).addComponent(textoColorFijado).addComponent(textoModoOscuro)))
+                .addGap(50)
+                .addGroup(layout.createSequentialGroup().addGroup(layout
+                        .createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(botonColorComparacion).addComponent(botonColorAsignacion).addComponent(botonColorFijado).addComponent(botonModoOscuro)))
+                .addGap(30));
+        layout.setVerticalGroup(
+                layout.createSequentialGroup().addGroup(layout.createSequentialGroup().addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(textoColorComparacion).addComponent(botonColorComparacion)))
+                        .addGroup(layout.createSequentialGroup().addGroup(layout
+                                .createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(textoColorAsignacion).addComponent(botonColorAsignacion)))
+                        .addGroup(layout.createSequentialGroup().addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(textoColorFijado).addComponent(botonColorFijado)))
+                        .addGroup(layout.createSequentialGroup().addGroup(layout
+                            .createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(textoModoOscuro).addComponent(botonModoOscuro))));
+
+        this.setMinimumSize(new Dimension((int) (this.getPreferredSize().getWidth()+100),this.getHeight()+100));
+        getContentPane().setLayout(new BorderLayout(10,0));
+        getContentPane().add(panelF, BorderLayout.NORTH);
+        getContentPane().add(panel, BorderLayout.CENTER);
+        //this.setLocationRelativeTo(null);
+        //this.add(panel);
+        ImageIcon icono=new ImageIcon(getClass().getResource("/util/icon/IconoApp.PNG"));
+        this.setIconImage(icono.getImage());
         this.setVisible(true);
         pack();
     }
@@ -151,6 +205,8 @@ public class Visualizacion extends javax.swing.JFrame {
             Sortrace.getConfig().setColorAsignacion(colorNew);
         }
         Sortrace.getConfig().modificarAjustesVisualizacion();
+        Sortrace.getPantalla().actualizarVista();
+
     }
     private void botonColorComparacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonAceptarMouseClicked
         Color colorAnt = Sortrace.getConfig().getColorComparacion();
@@ -160,47 +216,57 @@ public class Visualizacion extends javax.swing.JFrame {
             Sortrace.getConfig().modificarAjustesVisualizacion();
             botonColorComparacion.setBackground(colorNew);
             Sortrace.getConfig().setColorComparacion(colorNew);
+            Sortrace.getPantalla().actualizarVista();
         }
         Sortrace.getConfig().modificarAjustesVisualizacion();
+        Sortrace.getPantalla().actualizarVista();
+
 
     }
     private void botonColorFijadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonAceptarMouseClicked
         Color colorAnt = Sortrace.getConfig().getColorAsignacion();
         Color colorNew = JColorChooser.showDialog(this, Sortrace.getIdioma().getProperty("tituloColorChooser"), colorAnt);
         if(colorNew!=null){
-            Sortrace.getConfig().setColorAsignacion(colorNew);
+            Sortrace.getConfig().setColorFijado(colorNew);
             Sortrace.getConfig().modificarAjustesVisualizacion();
             botonColorFijado.setBackground(colorNew);
             Sortrace.getConfig().setColorFijado(colorNew);
         }
         Sortrace.getConfig().modificarAjustesVisualizacion();
+        Sortrace.getPantalla().actualizarVista();
 
     }
     private void botonModoOscuroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonAceptarMouseClicked
         if(Sortrace.getConfig().getModo().equals("si")) {
             Sortrace.getConfig().setModo("no");
+            Sortrace.getPantalla().actualizarModo();
             botonModoOscuro.setText("Activar");
             panel.setBackground(UIManager.getColor ( "Panel.background" ));
+            panelF.setBackground(UIManager.getColor ( "Panel.background" ));
             textoModoOscuro.setForeground(UIManager.getColor("JLabel.background"));
             textoColorComparacion.setForeground(UIManager.getColor("JLabel.foreground"));
             textoColorAsignacion.setForeground(UIManager.getColor("JLabel.foreground"));
             textoColorFijado.setForeground(UIManager.getColor("JLabel.foreground"));
+            textoEncabezamiento.setForeground(UIManager.getColor("JLabel.foreground"));
             botonModoOscuro.setBackground(UIManager.getColor("JButton.background"));
             botonModoOscuro.setForeground(UIManager.getColor("JButton.foreground"));
-            Sortrace.getPantalla().actualizarModo();
         }else{
             Sortrace.getConfig().setModo("si");
             botonModoOscuro.setText("Desactivar");
             panel.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            panelF.setBackground(Sortrace.getConfig().getPanelModoOscuro());
             textoModoOscuro.setForeground(Sortrace.getConfig().getTextoModoOscuro());
             textoColorComparacion.setForeground(Sortrace.getConfig().getTextoModoOscuro());
             textoColorAsignacion.setForeground(Sortrace.getConfig().getTextoModoOscuro());
             textoColorFijado.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            textoEncabezamiento.setForeground(Sortrace.getConfig().getTextoModoOscuro());
             botonModoOscuro.setBackground(Sortrace.getConfig().getBotonModoOscuro());
             botonModoOscuro.setForeground(Sortrace.getConfig().getTextoModoOscuro());
             Sortrace.getPantalla().actualizarModo();
         }
         Sortrace.getConfig().modificarAjustesVisualizacion();
+        Sortrace.getPantalla().actualizarVista();
+
     }
 
 
@@ -248,5 +314,7 @@ public class Visualizacion extends javax.swing.JFrame {
     private javax.swing.JLabel textoColorComparacion;
     private javax.swing.JLabel textoColorFijado;
     private javax.swing.JLabel textoModoOscuro;
+    private javax.swing.JLabel textoEncabezamiento;
     private javax.swing.JPanel panel;
+    private javax.swing.JPanel panelF;
 }

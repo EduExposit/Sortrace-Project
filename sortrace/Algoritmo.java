@@ -52,4 +52,6 @@ public interface Algoritmo {
     boolean IsComienzo();
 
     boolean IsFinal();
+
+    boolean IsContinuo();
 }

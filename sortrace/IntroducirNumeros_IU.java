@@ -25,13 +25,14 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
      */
     public IntroducirNumeros_IU(boolean modificar) {
         initComponents();
+        this.setLocationRelativeTo(null);
         if(modificar){
             //this.setBounds(0, 0, 1500, 350);
             error=false;
             this.panelDatos2 = new sortrace.PanelDatos2(Sortrace.getVector().getSize());
             jLabel2.setVisible(true);
             jLabel1.setVisible(false);
-            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+            /*javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
                     layout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -51,11 +52,19 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
                                     //.addComponent(panelDatos1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     //.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jPanel3))
-            );
+            );*/
+            this.setBounds(0, 0, panelDatos2.getPreferredSize().width+20, 250);
+            getContentPane().setLayout(new BorderLayout(10,0));
+            getContentPane().add(jPanel1, BorderLayout.CENTER);
+            getContentPane().add(panelDatos2, BorderLayout.CENTER);
+            getContentPane().add(jPanel3, BorderLayout.SOUTH);
+            this.panelDatos2.setVisible(true);
+            this.setLocationRelativeTo(null);
             this.panelDatos2.setVisible(true);
             this.jPanel1.setVisible(false);
             this.panelDatos2.setVisible(true);
             this.panelDatos2.mostrarNumeros();
+            this.setTitle(Sortrace.getIdioma().getProperty("modificarDatosTitulo"));
         }
         this.setResizable(false);
 
@@ -134,7 +143,7 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
         jLabel2=new javax.swing.JLabel();
         jLabel2.setText(Sortrace.getIdioma().getProperty("introducirDatosEtiquetaEntrada"));
         jLabel2.setVisible(false);
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        /*javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -153,8 +162,10 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 //.addComponent(panelDatos1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                 //.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3))
-        );
+                .addComponent(jPanel3)
+                .addGap(20))
+        );*/
+
         botonAceptar.setText(Sortrace.getIdioma().getProperty("introducirDatosBotonAceptar"));
         botonAceptar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -173,6 +184,7 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
         this.setVisible(true);
 
         if(Sortrace.getConfig().getModo().equals("si")) {
+            //private sortrace.PanelDatos panelDatos1;
             botonAceptar.setBackground(Sortrace.getConfig().getBotonModoOscuro());
             botonAceptar.setForeground(Sortrace.getConfig().getTextoModoOscuro());
             jButton2.setBackground(Sortrace.getConfig().getBotonModoOscuro());
@@ -201,7 +213,13 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
             jScrollPane1.setForeground(UIManager.getColor("jScrollPane.foreground"));
             this.getContentPane().setBackground(UIManager.getColor("JFrame.background"));
         }
+        getContentPane().setLayout(new BorderLayout(10,0));
+        getContentPane().add(panelDatos2, BorderLayout.CENTER);
+        getContentPane().add(jPanel1, BorderLayout.CENTER);
+        getContentPane().add(jPanel3, BorderLayout.SOUTH);
 
+        ImageIcon icono=new ImageIcon(getClass().getResource("/util/icon/IconoApp.PNG"));
+        this.setIconImage(icono.getImage());
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -221,9 +239,10 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
             //this.panelDatos1.setVisible(true);
             this.panelDatos2 = new sortrace.PanelDatos2(this.jList1.getSelectedValue());
             this.panelDatos2.repaint();
-            this.setBounds(0, 0, panelDatos2.getPreferredSize().width+100, 350);
+            this.setBounds(0, 0, panelDatos2.getPreferredSize().width+20, 250);
             jLabel2.setVisible(true);
             jLabel1.setVisible(false);
+            /*
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -244,16 +263,21 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
                                     //.addComponent(panelDatos1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     //.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jPanel3))
-            );
+            );*/
+            getContentPane().setLayout(new BorderLayout(10,0));
+            getContentPane().add(jPanel1, BorderLayout.CENTER);
+            getContentPane().add(panelDatos2, BorderLayout.CENTER);
+            getContentPane().add(jPanel3, BorderLayout.SOUTH);
             this.panelDatos2.setVisible(true);
+            this.setLocationRelativeTo(null);
         }else{
             añadirDatos();
             if(Sortrace.getAlgoritmo()!=null){
                 Sortrace.getAlgoritmo().terminar();
                 Sortrace.getAlgoritmo().setVector(Sortrace.getVector().getVector());
                 Sortrace.getAlgoritmo().ejecutar();
-                Sortrace.getPantalla().mostrarPanelVisualizacion();
             }
+            Sortrace.getPantalla().mostrarPanelVisualizacion();
             Sortrace.getPantalla().actualizarBotonesArchivo();
             if(!error) {
                 JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosMensajeExito"), Sortrace.getIdioma().getProperty("introducirDatosTituloExito"), JOptionPane.INFORMATION_MESSAGE, (Icon) null);
@@ -273,10 +297,14 @@ public class IntroducirNumeros_IU extends javax.swing.JFrame {
                 } catch (NumberFormatException var1) {
                     JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosErrorMensajeFormato"), Sortrace.getIdioma().getProperty("introducirDatosErrorTituloFormato"), 0, (Icon) null);
                     error = true;
+                    vectorAux=null;
+                    break;
                 }
             }else{
                 JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosErrorMensajeFormato"), Sortrace.getIdioma().getProperty("introducirDatosErrorTituloFormato"), 0, (Icon) null);
                 error = true;
+                vectorAux=null;
+                break;
             }
         }
 

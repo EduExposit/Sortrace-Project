@@ -1,6 +1,7 @@
 package sortrace;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class Animacion extends javax.swing.JFrame {
@@ -9,6 +10,7 @@ public class Animacion extends javax.swing.JFrame {
     static final int FPS_INIT = 5;
     public Animacion() {
         initComponents();
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
 
@@ -32,13 +34,19 @@ public class Animacion extends javax.swing.JFrame {
         velocidad.setPaintLabels(true);
         Font font = new Font("DejaVu Sans", Font.ITALIC, 14);
         velocidad.setFont(font);
-        velocidad.setPreferredSize(new Dimension(350,50));
+        velocidad.setPreferredSize(new Dimension(300,50));
+        velocidad.setValue(Sortrace.getConfig().getVelocidadAnimacion());
+
 
         panel = new javax.swing.JPanel();
+        panel1 = new javax.swing.JPanel();
+        panel2 = new javax.swing.JPanel();
+        panel3 = new javax.swing.JPanel();
+
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        textoSlider.setFont(new java.awt.Font("DejaVu Sans", Font.BOLD, 14)); // NOI18N
+        textoSlider.setFont(new java.awt.Font("DejaVu Sans", Font.PLAIN, 14)); // NOI18N
         textoSlider.setText(Sortrace.getIdioma().getProperty("animacionTextoSlider"));
 
         botonAceptar.setText(Sortrace.getIdioma().getProperty("introducirDatosBotonAceptar"));
@@ -56,7 +64,7 @@ public class Animacion extends javax.swing.JFrame {
 
         //botonAceptar.setPreferredSize(new Dimension(40, 40));
         //botonCancelar.setPreferredSize(new Dimension(40, 40));
-        FlowLayout layout=new FlowLayout();
+        /*FlowLayout layout=new FlowLayout();
         this.setBounds(0,0,400,150);
         layout.preferredLayoutSize(this);
         panel.setLayout(layout);
@@ -64,48 +72,60 @@ public class Animacion extends javax.swing.JFrame {
         panel.add(textoSlider);
         panel.add(velocidad);
         panel.add(botonAceptar);
-        panel.add(botonCancelar);
+        panel.add(botonCancelar);*/
+        panel1.setLayout(new FlowLayout());
+        ImageIcon imagen=new ImageIcon(getClass().getResource("/util/icon/AjustesAnimacion.png"));
+        JLabel im = new JLabel();
+        im.setIcon(imagen);
+        panel1.setBorder(new EmptyBorder(5,15,0,15));
+        panel1.add(im);
+        panel1.add(textoSlider);
 
-        /*panel.setLayout(new GridBagLayout());
-        textoSlider.setHorizontalAlignment(JLabel.CENTER);
-        textoSlider.setVerticalAlignment(JLabel.NORTH);
-        botonAceptar.setHorizontalAlignment(JButton.CENTER);
-        botonCancelar.setHorizontalAlignment(JButton.CENTER);
+        panel2.setLayout(new FlowLayout());
+        panel2.add(velocidad);
 
-        GridBagConstraints c = new GridBagConstraints();
-        c.weightx = 0.0;
-        c.weighty = 1;
-        c.gridwidth = 1;
-        c.gridheight=1;
-        c.gridx = 0;
-        c.gridy = 0;
-        panel.add(textoSlider, c);
-        c.gridheight=1;
-        c.gridx = 0;
-        c.gridy = 2;
-        panel.add(velocidad,c);
+        panel3.setLayout(new FlowLayout());
+        panel3.setBorder(new EmptyBorder(0,0,15,0));
+        panel3.add(botonAceptar);
+        panel3.add(botonCancelar);
 
-        c.gridx = 0;
-        c.gridy = 3;
-        panel.add(botonAceptar,c);
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(panel1, BorderLayout.NORTH);
+        getContentPane().add(panel2, BorderLayout.CENTER);
+        getContentPane().add(panel3, BorderLayout.SOUTH);
 
-        c.gridx = 1;
-        c.gridy = 3;
-        panel.add(botonCancelar,c);*/
-        /*panel.setLayout(new FlowLayout());
-        panel.add(textoColorAsignacion);
-        panel.add(botonColorAsignacion);
-        panel.add(textoColorComparacion);
-        panel.add(botonColorComparacion);
-        panel.add(textoColorFijado);
-        panel.add(botonColorFijado);
-        panel.add(textoModoOscuro);
-        panel.add(botonModoOscuro);
-        this.add(panel);*/
-
-        this.add(panel);
-
+        this.setTitle(Sortrace.getIdioma().getProperty("tituloAnimacion"));
+        ImageIcon icono=new ImageIcon(getClass().getResource("/util/icon/IconoApp.PNG"));
+        this.setIconImage(icono.getImage());
         this.setVisible(true);
+        if(Sortrace.getConfig().getModo().equals("si")) {
+            this.getContentPane().setBackground(Sortrace.getConfig().getFondoModoOscuro());
+            panel.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            panel1.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            panel2.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            panel3.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            botonAceptar.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            botonAceptar.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            botonCancelar.setBackground(Sortrace.getConfig().getBotonModoOscuro());
+            botonCancelar.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            textoSlider.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            velocidad.setForeground(Sortrace.getConfig().getTextoModoOscuro());
+            velocidad.setBackground(Sortrace.getConfig().getPanelModoOscuro());
+            //vistaVector;
+        }else{
+            this.getContentPane().setBackground(UIManager.getColor ("JFrame.background"));
+            panel.setBackground(UIManager.getColor ("JPanel.background"));
+            panel1.setBackground(UIManager.getColor ("JPanel.background"));
+            panel2.setBackground(UIManager.getColor ("JPanel.background"));
+            panel3.setBackground(UIManager.getColor ("JPanel.background"));
+            botonAceptar.setBackground(UIManager.getColor("JButton.background"));
+            botonAceptar.setForeground(UIManager.getColor("JButton.foreground"));
+            botonCancelar.setBackground(UIManager.getColor("JButton.background"));
+            botonCancelar.setForeground(UIManager.getColor("JButton.foreground"));
+            textoSlider.setForeground(UIManager.getColor("JLabel.foreground"));
+            velocidad.setForeground(UIManager.getColor("JSlider.foreground"));
+            velocidad.setBackground(UIManager.getColor("JSlider.background"));
+        }
         pack();
     }
 
@@ -159,5 +179,8 @@ public class Animacion extends javax.swing.JFrame {
     private javax.swing.JButton botonCancelar;
     private javax.swing.JLabel textoSlider;
     private javax.swing.JPanel panel;
+    private javax.swing.JPanel panel1;
+    private javax.swing.JPanel panel2;
+    private javax.swing.JPanel panel3;
 }
 

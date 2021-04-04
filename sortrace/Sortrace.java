@@ -35,9 +35,6 @@ public class Sortrace {
         return config;
     }
 
-    public static void setConfig(Configuracion config) {
-        Sortrace.config = config;
-    }
 
     public static Language getIdioma() {
         return idioma;
@@ -45,9 +42,10 @@ public class Sortrace {
 
     public static void actualizarIdioma() {
         idioma= new Language(config.getIdioma());
+
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         config=new Configuracion();
         config.cargarConfiguracionXML();
         idioma= new Language(config.getIdioma());

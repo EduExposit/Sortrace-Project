@@ -6,7 +6,6 @@
 package sortrace;
 
 import sortrace.auxiliar.Vector;
-import sortrace.vistas.VistaVector;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,8 +25,13 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
         this.buttonGroup1.add(jRadioButton1);
         this.buttonGroup1.add(jRadioButton2);
         this.buttonGroup1.add(jRadioButton3);
-        this.setVisible(true);
-        this.setResizable(false);
+        if(creado){
+            this.dispose();
+        }else {
+            this.setLocationRelativeTo(null);
+            this.setVisible(true);
+            this.setResizable(false);
+        }
     }
 
     /**
@@ -38,14 +42,34 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        creado=false;
+        jTextField1= new javax.swing.JTextField();
+        jTextField2= new javax.swing.JTextField();
+        String [] botones = { Sortrace.getIdioma().getProperty("generarDatosPersonalizar"), Sortrace.getIdioma().getProperty("generarDatosAleatorio") };
+        int seleccionRapida = JOptionPane.showOptionDialog(this, Sortrace.getIdioma().getProperty("generarDatosAtajo"), Sortrace.getIdioma().getProperty("generarDatosTitulo"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, botones, botones[0]);
+        if(seleccionRapida==1){
+            creado=true;
+            this.longitud=(int) (Math.random()*26 + 4);
+            Vector vector = Sortrace.getVector();
+            vector.setVector(generarNumAleatorios(longitud));
+            vector.setSize(longitud);
+
+            if(Sortrace.getAlgoritmo()!=null){
+                Sortrace.getAlgoritmo().terminar();
+                Sortrace.getAlgoritmo().setVector(Sortrace.getVector().getVector());
+                Sortrace.getAlgoritmo().ejecutar();
+            }
+            Sortrace.getPantalla().mostrarPanelVisualizacion();
+            Sortrace.getPantalla().actualizarBotonesArchivo();
+        }else if(seleccionRapida==JOptionPane.CLOSED_OPTION){
+            creado=true;
+        }
         error=false;
         buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -53,6 +77,8 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
+
+
 
 
         this.setTitle(Sortrace.getIdioma().getProperty("generarDatosTitulo"));
@@ -226,6 +252,8 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
             jRadioButton3.setBackground(UIManager.getColor("jRadioButton.background"));
             this.getContentPane().setBackground(UIManager.getColor("JFrame.background"));
         }
+        ImageIcon icono=new ImageIcon(getClass().getResource("/util/icon/IconoApp.PNG"));
+        this.setIconImage(icono.getImage());
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonAceptarMouseClicked
@@ -246,8 +274,8 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
             Sortrace.getAlgoritmo().terminar();
             Sortrace.getAlgoritmo().setVector(Sortrace.getVector().getVector());
             Sortrace.getAlgoritmo().ejecutar();
-            Sortrace.getPantalla().mostrarPanelVisualizacion();
         }
+        Sortrace.getPantalla().mostrarPanelVisualizacion();
         Sortrace.getPantalla().actualizarBotonesArchivo();
         if(!error) {
             JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosMensajeExito"), Sortrace.getIdioma().getProperty("introducirDatosTituloExito"), JOptionPane.INFORMATION_MESSAGE, (Icon) null);
@@ -258,29 +286,35 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
         Random random = new Random(System.currentTimeMillis());
         int[] vectorAux = new int[longitud];
         int limSup,limInf;
-        if(this.jTextField1.getText().equals("")){
+        if (!creado) {
+            if (this.jTextField1.getText().equals("")) {
+                limInf = -999;
+                JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("generarDatosLimInfVacioMensaje"), Sortrace.getIdioma().getProperty("generarDatosLimInfVacioTitulo"), JOptionPane.INFORMATION_MESSAGE, (Icon) null);
+            } else {
+                try {
+                    limInf = Integer.parseInt(this.jTextField1.getText());
+                } catch (NumberFormatException var1) {
+                    JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosErrorMensajeFormato"), Sortrace.getIdioma().getProperty("introducirDatosErrorTituloFormato"), 0, (Icon) null);
+                    error = true;
+                    return null;
+                }
+            }
+            if (this.jTextField2.getText().equals("")) {
+                limSup = 999;
+                JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("generarDatosLimSupVacioMensaje"), Sortrace.getIdioma().getProperty("generarDatosLimSupVacioTitulo"), JOptionPane.INFORMATION_MESSAGE, (Icon) null);
+            } else {
+                try {
+                    limSup = Integer.parseInt(this.jTextField2.getText());
+                } catch (NumberFormatException var1) {
+                    JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosErrorMensajeFormato"), Sortrace.getIdioma().getProperty("introducirDatosErrorTituloFormato"), 0, (Icon) null);
+                    error = true;
+                    return null;
+                }
+            }
+        }else{
             limInf=-999;
-        }else{
-            try {
-                limInf = Integer.parseInt(this.jTextField1.getText());
-            }catch (NumberFormatException var1) {
-                JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosErrorMensajeFormato"), Sortrace.getIdioma().getProperty("introducirDatosErrorTituloFormato"), 0, (Icon) null);
-                error = true;
-                return null;
-            }
-        }
-        if(this.jTextField2.getText().equals("")){
             limSup=999;
-        }else{
-            try {
-                limSup = Integer.parseInt(this.jTextField2.getText());
-            }catch (NumberFormatException var1) {
-                JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("introducirDatosErrorMensajeFormato"), Sortrace.getIdioma().getProperty("introducirDatosErrorTituloFormato"), 0, (Icon) null);
-                error = true;
-                return null;
-            }
         }
-
         if(limInf>=limSup){
             JOptionPane.showMessageDialog(this, Sortrace.getIdioma().getProperty("generarDatosLimitesMensaje"), Sortrace.getIdioma().getProperty("generarDatosLimitesTitulo"), 0, (Icon) null);
             error = true;
@@ -372,6 +406,7 @@ public class GenerarDatosAleatorios_IU extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private boolean error;
+    private boolean creado;
     private int longitud;
     // End of variables declaration//GEN-END:variables
 }

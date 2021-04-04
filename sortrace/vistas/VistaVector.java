@@ -13,16 +13,18 @@ import sortrace.Algoritmo;
 import sortrace.Sortrace;
 import sortrace.algoritmos.*;
 
+import static java.lang.Thread.sleep;
+
 
 public class VistaVector extends JPanel {
     private Algoritmo algoritmo = null;
     private Color colorAsignacion = null;
     private Color colorComparacion = null;
     private Color colorFijado = null;
-    private static final Stroke pincelElementoIntercambiado = new BasicStroke(2.0F, 0, 1, 1.0F);
-    private static final Stroke pincelElementoAColocar = new BasicStroke(1.0F, 1, 1, 1.0F, new float[]{5.0F, 5.0F, 5.0F, 5.0F}, 5.0F);
-    private static final Stroke pincelElementoFijado = new BasicStroke(2.0F, 1, 0, 1.0F);
-    private static final Stroke pincelFlecha1 = new BasicStroke(1.5F, 0, 1, 1.0F);
+    private static final Stroke pincelElementoIntercambiado = new BasicStroke(2.0F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1.0F);
+    private static final Stroke pincelElementoAColocar = new BasicStroke(1.0F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0F, new float[]{5.0F, 5.0F, 5.0F, 5.0F}, 5.0F);
+    private static final Stroke pincelElementoFijado = new BasicStroke(2.0F, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 1.0F);
+    private static final Stroke pincelFlecha1 = new BasicStroke(1.5F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1.0F);
     private boolean compare;
     private boolean asing;
     private boolean set;
@@ -70,6 +72,19 @@ public class VistaVector extends JPanel {
         this.colorComparacion = Sortrace.getConfig().getColorComparacion();
         this.colorFijado= Sortrace.getConfig().getColorFijado();
         this.repaint();
+        try {
+            sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(compare) {
+            Sortrace.getPantalla().subrayarComparacionCodigo();
+        }else if(asing){
+            Sortrace.getPantalla().subrayarAsignacionCodigo();
+        }else{
+            Sortrace.getPantalla().actualizarPanelCodigo();
+        }
+
     }
     public boolean isCompare(){
         return compare;
@@ -82,7 +97,7 @@ public class VistaVector extends JPanel {
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (this.algoritmo != null) {
+        //if (this.algoritmo != null) {
             System.out.println("****************** VECTOR ***********************");
 
             Graphics2D g2D = (Graphics2D) g;
@@ -92,19 +107,9 @@ public class VistaVector extends JPanel {
             Graphics2D g2DStadistics = (Graphics2D) g;
             RenderingHints rhStadistics = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             g2DStadistics.setRenderingHints(rhStadistics);
-            if(this.algoritmo instanceof Seleccion) {
-                this.pintarSeleccion(this.algoritmo, g2D, g2DStadistics);
-            }else if(this.algoritmo instanceof BurbujaBasica){
-                this.pintarSeleccion(this.algoritmo, g2D, g2DStadistics);
-            }else if(this.algoritmo instanceof BurbujaAvanzada){
-                this.pintarSeleccion(this.algoritmo, g2D, g2DStadistics);
-            }else if(this.algoritmo instanceof Insercion){
-                this.pintarSeleccion(this.algoritmo, g2D, g2DStadistics);
 
-            }else if(this.algoritmo instanceof Shell){
-                this.pintarSeleccion(this.algoritmo, g2D, g2DStadistics);
+            this.pintarSeleccion(this.algoritmo, g2D, g2DStadistics);
 
-            }
 
 
             /*if (traza instanceof TrazaInsercion) {
@@ -123,7 +128,7 @@ public class VistaVector extends JPanel {
                 this.pintarIncrementos((TrazaIncrementos)traza, g2D);
             }*/
 
-        }
+        //}
     }
 
     private int obtenerPosicionNumero(int numero) {
@@ -141,6 +146,7 @@ public class VistaVector extends JPanel {
     }
 
     private void pintarSeleccion(Algoritmo algoritmo, Graphics2D g2D, Graphics g2DStadistics) {
+        Color colorDefecto;
         compare=false;
         asing=false;
         set=false;
@@ -148,7 +154,6 @@ public class VistaVector extends JPanel {
         int anchoRect = anchoPanel - 500;
         int posYElemento = 20;
         Stroke pincelNormal = g2D.getStroke();
-        Color colorDefecto=g2D.getColor();
         if(Sortrace.getConfig().getModo().equals("si")) {
             colorDefecto = Sortrace.getConfig().getTextoModoOscuro();
             g2D.setColor(colorDefecto);
@@ -156,68 +161,102 @@ public class VistaVector extends JPanel {
             colorDefecto = g2D.getColor();
         }
         System.out.println("PINTAR SELECCION");
-        if(algoritmo.getVector()==null){
-
-        }else {
-            for (int i = 0; i < algoritmo.getVector().length; ++i) {
-                if (algoritmo.esPosicionIntercambiada(i)) {
-                    asing=true;
-                    g2D.setStroke(pincelElementoIntercambiado);
-                    g2D.setColor(this.colorAsignacion);
-                    g2D.fillRoundRect(50, posYElemento - 10, anchoRect, 13, 5, 5);
-                    g2D.setStroke(pincelNormal);
-                    g2D.setColor(colorDefecto);
-                } else if (algoritmo.esPosicionElementoComparado(i)) {
-                    if (algoritmo.noIntercambio()) {
-                        compare=true;
-                        g2D.setColor(this.colorComparacion);
-                        g2D.fillRoundRect(50, posYElemento - 10, anchoRect, 13, 5, 5);
+        if(this.algoritmo!=null){
+            if(algoritmo.getVector()!=null){
+                for (int i = 0; i < algoritmo.getVector().length; ++i) {
+                    if (algoritmo.esPosicionIntercambiada(i)) {
+                        asing=true;
+                        System.out.println("asig");
+                        g2D.setStroke(pincelElementoIntercambiado);
+                        g2D.setColor(this.colorAsignacion);
+                        g2D.fillRoundRect(50, posYElemento - 10, anchoRect, 13, 30, 30);
                         g2D.setStroke(pincelNormal);
                         g2D.setColor(colorDefecto);
+                    }else if (algoritmo.esPosicionElementoComparado(i)) {
+                        if (algoritmo.noIntercambio()) {
+                            compare=true;
+                            System.out.println("compare");
+                            g2D.setColor(this.colorComparacion);
+                            g2D.fillRoundRect(50, posYElemento - 10, anchoRect, 13, 30, 30);
+                            g2D.setStroke(pincelNormal);
+                            g2D.setColor(colorDefecto);
+                        }else {
+                            //compare=true;
+                            System.out.println("compare");
+                            g2D.draw(new Double(50.0D, posYElemento - 10, anchoRect, 13.0D, 30.0D, 30.0D));
+                        }
+                    }else if (algoritmo.esPosicionElementoFijado(i)) {
+                        set=true;
+                        g2D.setStroke(pincelElementoFijado);
+                        g2D.setColor(this.colorFijado);
+                        g2D.draw(new Double(50.0D, posYElemento - 10, anchoRect, 13.0D, 30.0D, 30.0D));
+                        g2D.setStroke(pincelNormal);
+                        g2D.setColor(colorDefecto);
+                    }else {
+                        g2D.draw(new Double(50.0D, posYElemento - 10, anchoRect, 13.0D, 30.0D, 30.0D));
+                    }
+                    if(this.algoritmo instanceof Seleccion){
+                        Seleccion alg = (Seleccion) algoritmo;
+                        if (algoritmo.esPosicionElementoComparado(i)) {
+                            if (alg.esI(i)) {
+                                g2D.drawString("i->", 30, posYElemento + 1);
+                            }else if (alg.esJ(i)) {
+                                if (alg.getjAct() != 0) {
+                                    g2D.drawString("j->", 30, posYElemento);
+                                }
+                            }
+                            if (alg.esMin(i)) {
+                                if (alg.getMinAct() != 0) {
+                                    if ((alg.getMinAct() == alg.getjAct()) || (alg.getMinAct() == alg.getiAct())) {
+                                        g2D.drawString("min,", 5, posYElemento + 1);
+                                    }else {
+                                        g2D.drawString("min->", 20, posYElemento + 1);
+                                    }
+                                }
+                            }
+                        }
+                    }else if(this.algoritmo instanceof Insercion){
+                        if (algoritmo.esPosicionElementoComparado(i)) {
+                            Insercion alg = (Insercion) algoritmo;
+                            g2D.drawString("aux=" + alg.pivoteActual(), 0, posYElemento + 1);
+                        }
+                    }
+
+                    g2D.drawString(Integer.toString(algoritmo.getVector()[i]), 50 + anchoRect / 2 - this.obtenerPosicionNumero(algoritmo.getVector()[i]), posYElemento + 1);
+                    g2D.drawString(Integer.toString(i), 50 + anchoRect - 15, posYElemento + 2);
+
+
+                    posYElemento += 18;
+                }
+                if(!Sortrace.getAlgoritmo().IsContinuo()) {
+                    if (compare) {
+                        Sortrace.getPantalla().subrayarComparacionCodigo();
+                    }else if (asing) {
+                        Sortrace.getPantalla().subrayarAsignacionCodigo();
                     } else {
-                        compare=true;
-                        g2D.draw(new Double(50.0D, (double) (posYElemento - 10), (double) anchoRect, 13.0D, 5.0D, 5.0D));
-                    }
-                } else if (algoritmo.esPosicionElementoFijado(i)) {
-                    set=true;
-                    g2D.setStroke(pincelElementoFijado);
-                    g2D.setColor(this.colorFijado);
-                    g2D.draw(new Double(50.0D, (double) (posYElemento - 10), (double) anchoRect, 13.0D, 5.0D, 5.0D));
-                    g2D.setStroke(pincelNormal);
-                    g2D.setColor(colorDefecto);
-                } else {
-                    g2D.draw(new Double(50.0D, (double) (posYElemento - 10), (double) anchoRect, 13.0D, 5.0D, 5.0D));
-                }
-
-                if(this.algoritmo instanceof Insercion){
-                    if (algoritmo.esPosicionElementoComparado(i)) {
-                        Insercion alg = (Insercion) algoritmo;
-                        g2D.drawString("aux = " + Integer.toString(alg.pivoteActual()), 0, posYElemento + 1);
+                        Sortrace.getPantalla().actualizarPanelCodigo();
                     }
                 }
+                System.out.println("******************ESTADISTICAS***********************");
+                g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionRendimiento"), 55 + anchoRect, 20);
+                g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionColumnas") + " = " + algoritmo.Columnas(), 60 + anchoRect, 40);
+                g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionComparaciones") + " = " + algoritmo.Comparaciones(), 60 + anchoRect, 60);
+                g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionAsignaciones") + " = " + algoritmo.Asignaciones(), 60 + anchoRect, 80);
 
-                g2D.drawString(Integer.toString(algoritmo.getVector()[i]), 50 + anchoRect / 2 - this.obtenerPosicionNumero(algoritmo.getVector()[i]), posYElemento + 1);
-                g2D.drawString(Integer.toString(i), 50 + anchoRect - 7, posYElemento + 2);
-
-
-                posYElemento += 18;
+                if(this.algoritmo instanceof Shell){
+                    Shell alg = (Shell) algoritmo;
+                    g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionIncrementos") + " = " + alg.getIncrementos(), 60 + anchoRect, 120);
+                    g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionIteracion") + " = " + alg.getItActual()+"/"+alg.getItTotales(), 60 + anchoRect, 140);
+                }
             }
-            Sortrace.getPantalla().actualizarPanelCodigo();
-            if(compare) {
-                Sortrace.getPantalla().subrayarComparacionCodigo();
-            }else if(asing){
-                Sortrace.getPantalla().subrayarAsignacionCodigo();
-            }
-            System.out.println("******************ESTADISTICAS***********************");
-            g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionRendimiento"), 55 + anchoRect, 20);
-            g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionColumnas") + " = " + algoritmo.Columnas(), 60 + anchoRect, 40);
-            g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionComparaciones") + " = " + algoritmo.Comparaciones(), 60 + anchoRect, 60);
-            g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionAsignaciones") + " = " + algoritmo.Asignaciones(), 60 + anchoRect, 80);
-
-            if(this.algoritmo instanceof Shell){
-                Shell alg = (Shell) algoritmo;
-                g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionIncrementos") + " = " + alg.getIncrementos(), 60 + anchoRect, 120);
-                g2DStadistics.drawString(Sortrace.getIdioma().getProperty("visualizacionIteracion") + " = " + alg.getItActual()+"/"+alg.getItTotales(), 60 + anchoRect, 140);
+        }else{
+            if(Sortrace.getVector().getVector()!=null){
+                for (int i = 0; i < Sortrace.getVector().getVector().length; ++i) {
+                    g2D.draw(new Double(50.0D, posYElemento - 10, anchoRect, 13.0D, 30.0D, 30.0D));
+                    g2D.drawString(Integer.toString(Sortrace.getVector().getVector()[i]), 50 + anchoRect / 2 - this.obtenerPosicionNumero(Sortrace.getVector().getVector()[i]), posYElemento + 1);
+                    g2D.drawString(Integer.toString(i), 50 + anchoRect - 15, posYElemento + 2);
+                    posYElemento += 18;
+                }
             }
         }
     }
