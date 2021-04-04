@@ -13,6 +13,7 @@ public class Shell implements Algoritmo {
     int pos,asignaciones=0,comparaciones=0,fijados=0; //variable para contar: la posicion, el numero de asinaciones, el numero de comparaiones y el numero de elementos fijados
     int posMaxima; //numero de posiciones que hay guardadas en el array
     int posFinal=-1;
+    int itTotales;
     int incrementos; //numero de incrementos del algoritmo de shell
     int sigIt;  //posicion de la siguiente iteracion
     int itActual; //iteracion actual
@@ -67,172 +68,194 @@ public class Shell implements Algoritmo {
     }
 
     public int getIncrementos() {
-        return incrementos;
+        return configPos.get(pos).getIncrementos();
     }
 
     public int getItActual() {
-        return itActual;
+        return configPos.get(pos).getItAct();
     }
 
     @Override
     public void ejecutar() {
-        Thread th1 =new Thread(new Runnable() {//thread para realizar el algoritmo
-            @Override
-            public void run() {//funciona pero falta sincronizar la posicion del thread con la que realmente estoy
-                //Creamos la primera posicion del vector con la configuracion inicial y la guardamos
-                ConfigPos c=new ConfigPos();
-                c.setVector(v.clone());
-                c.setAsignaciones(0);
-                c.setColumnas(0);
-                c.setComparaciones(0);
-                configPos.add(c);
-                try {
-                    if(continuo==true){
-                        Sortrace.getPantalla().mostrarPanelVisualizacion();
-                        Sortrace.getPantalla().añadirFotoSecuencia();
-                        sleep(1000);
-                    }
-                    if(!avanzaIt) {
+        //thread para realizar el algoritmo
+        th1 =new Thread(() -> {//funciona pero falta sincronizar la posicion del thread con la que realmente estoy
+            //Creamos la primera posicion del vector con la configuracion inicial y la guardamos
+            ConfigPos c=new ConfigPos();
+            c.setVector(v.clone());
+            c.setAsignaciones(0);
+            c.setColumnas(0);
+            c.setComparaciones(0);
+            c.setIncrementos(0);
+            c.setItAct(0);
+            c.setItTotal(0);
+            configPos.add(c);
+            try {
+                if(continuo){
+                    Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
+                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                }
+                else {
+                    if (!avanzaIt) {
                         semAvance.acquire();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
-                int markIt = 0;
-                posIt.add(markIt);//guardamos en que posicion esta la primera iteracion
-                for (incrementos = v.length / 2; incrementos > 0; incrementos /= 2) {
-                    for (int i=1; i<v.length/incrementos; i++) {
-                        sigIt++;
-                        itActual=i;
-                        for (int j=v.length-1; j>=incrementos*i; j--){
-                            ConfigPos c1=new ConfigPos();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            int markIt = 0;
+            posIt.add(markIt);//guardamos en que posicion esta la primera iteracion
+            for (incrementos = v.length / 2; incrementos > 0; incrementos /= 2) {
+                for (int i=1; i<v.length/incrementos; i++) {
+                    itTotales=(v.length / incrementos) -1;
+                    sigIt++;
+                    itActual=i;
+                    for (int j=v.length-1; j>=incrementos*i; j--){
+                        ConfigPos c1=new ConfigPos();
 
-                            /*nueva posicion*/
-                            comparaciones++;
-                            markIt++;
-                            pos++;
-                            posMaxima++;
-                            c1.setVector(v.clone());
-                            c1.getComparado().add(j-incrementos);
-                            c1.getComparado().add(j);
-                            c1.setAsignaciones(asignaciones);
-                            c1.setColumnas(fijados);
-                            c1.setComparaciones(comparaciones);
-                            c1.setFijado((ArrayList<Integer>)configPos.get(configPos.size()-1).getFijado().clone());
-                            configPos.add(c1);
-                            /*nueva posicion*/
+                        /*nueva posicion*/
+                        comparaciones++;
+                        markIt++;
+                        pos++;
+                        posMaxima++;
+                        c1.setVector(v.clone());
+                        c1.getComparado().add(j-incrementos);
+                        c1.getComparado().add(j);
+                        c1.setAsignaciones(asignaciones);
+                        c1.setColumnas(fijados);
+                        c1.setComparaciones(comparaciones);
+                        c1.setFijado((ArrayList<Integer>)configPos.get(configPos.size()-1).getFijado().clone());
+                        c1.setIncrementos(incrementos);
+                        c1.setItAct(itActual);
+                        c1.setItTotal(itTotales);
+                        configPos.add(c1);
+                        /*nueva posicion*/
 
-                            //aqui cambiaria el axuliar que cuenta los pasos hasta la anterior iteracion
-                            if (v[j-incrementos]>v[j]) {
-                                try {
-                                    if(continuo==true){
-                                        Sortrace.getPantalla().mostrarPanelVisualizacion();
-                                        Sortrace.getPantalla().añadirFotoSecuencia();
-                                        sleep(1000);
-                                    }
-                                    if(!avanzaIt) {
-                                        semAvance.acquire();
-                                    }
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
-                                /*nueva posicion*/
-                                pos++;
-                                markIt++;
-                                posMaxima++;
-                                asignaciones+=3;
-                                ConfigPos c2= new ConfigPos();
-                                c2.getIntercambios().add(j-incrementos);
-                                c2.getIntercambios().add(j);
-                                c2.setVector(v.clone());
-                                c2.setAsignaciones(asignaciones);
-                                c2.setColumnas(fijados);
-                                c2.setComparaciones(comparaciones);
-                                c2.setFijado((ArrayList<Integer>)configPos.get(configPos.size()-1).getFijado().clone());
-                                configPos.add(c2);
-                                /*nueva posicion*/
-
-                                try {
-                                    if(continuo==true){
-                                        Sortrace.getPantalla().mostrarPanelVisualizacion();
-                                        Sortrace.getPantalla().añadirFotoSecuencia();
-                                        sleep(1000);
-                                    }
-                                    if(!avanzaIt) {
-                                        semAvance.acquire();
-                                    }
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
-                                int aux = v[j];
-                                v[j] = v[j-incrementos];
-                                v[j-incrementos] = aux;
-
-                                /*nueva posicion*/
-                                pos++;
-                                markIt++;
-                                posMaxima++;
-                                ConfigPos c3= new ConfigPos();
-                                c3.setVector(v.clone());
-                                c3.setAsignaciones(asignaciones);
-                                c3.setColumnas(fijados);
-                                c3.setComparaciones(comparaciones);
-                                c3.setFijado((ArrayList<Integer>)configPos.get(configPos.size()-1).getFijado().clone());
-                                configPos.add(c3);
-                                /*nueva posicion*/
-
-                            }
+                        //aqui cambiaria el axuliar que cuenta los pasos hasta la anterior iteracion
+                        if (v[j-incrementos]>v[j]) {
                             try {
-                                if(continuo==true){
+                                if(continuo){
                                     Sortrace.getPantalla().mostrarPanelVisualizacion();
                                     Sortrace.getPantalla().añadirFotoSecuencia();
-                                    sleep(1000);
-                                }
-                                if(!avanzaIt) {
-                                    semAvance.acquire();
+                                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                                }else {
+                                    if (!avanzaIt) {
+                                        semAvance.acquire();
+                                    }
                                 }
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+
+                            /*nueva posicion*/
+                            pos++;
+                            markIt++;
+                            posMaxima++;
+                            asignaciones+=3;
+                            ConfigPos c2= new ConfigPos();
+                            c2.getIntercambios().add(j-incrementos);
+                            c2.getIntercambios().add(j);
+                            c2.setVector(v.clone());
+                            c2.setAsignaciones(asignaciones);
+                            c2.setColumnas(fijados);
+                            c2.setComparaciones(comparaciones);
+                            c2.setFijado((ArrayList<Integer>)configPos.get(configPos.size()-1).getFijado().clone());
+                            c2.setIncrementos(incrementos);
+                            c2.setItAct(itActual);
+                            c2.setItTotal(itTotales);
+                            configPos.add(c2);
+                            /*nueva posicion*/
+
+                            try {
+                                if(continuo){
+                                    Sortrace.getPantalla().mostrarPanelVisualizacion();
+                                    Sortrace.getPantalla().añadirFotoSecuencia();
+                                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                                }else {
+                                    if (!avanzaIt) {
+                                        semAvance.acquire();
+                                    }
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            int aux = v[j];
+                            v[j] = v[j-incrementos];
+                            v[j-incrementos] = aux;
+
+                            /*nueva posicion*/
+                            pos++;
+                            markIt++;
+                            posMaxima++;
+                            ConfigPos c3= new ConfigPos();
+                            c3.setVector(v.clone());
+                            c3.setAsignaciones(asignaciones);
+                            c3.setColumnas(fijados);
+                            c3.setComparaciones(comparaciones);
+                            c3.setFijado((ArrayList<Integer>)configPos.get(configPos.size()-1).getFijado().clone());
+                            c3.setIncrementos(incrementos);
+                            c3.setItAct(itActual);
+                            c3.setItTotal(itTotales);
+                            configPos.add(c3);
+                            /*nueva posicion*/
+
                         }
-                        avanzaIt=false;
-                        fijados++;
-                        posIt.add(markIt);
+                        try {
+                            if(continuo){
+                                Sortrace.getPantalla().mostrarPanelVisualizacion();
+                                Sortrace.getPantalla().añadirFotoSecuencia();
+                                sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                            }else {
+                                if (!avanzaIt) {
+                                    semAvance.acquire();
+                                }
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-                if(incrementos==0){
-                    incrementos=1;
-                }
 
-                /*nueva posicion*/
-                pos++;
-                markIt++;
-                posMaxima++;
-                ConfigPos c4= new ConfigPos();
-                c4.setVector(v.clone());
-                c4.setAsignaciones(asignaciones);
-                c4.setColumnas(fijados);
-                c4.setComparaciones(comparaciones);
-                for(int x=0;x<v.length;x++){
-                    c4.getFijado().add(x);
+                    avanzaIt=false;
+                    fijados++;
+                    posIt.add(markIt);
                 }
-                configPos.add(c4);
-                /*nueva posicion*/
-
-                try {
-                    if (continuo == true) {
-                        Sortrace.getPantalla().mostrarPanelVisualizacion();
-                        Sortrace.getPantalla().añadirFotoSecuencia();
-                        sleep(1000);
-                    }
-                    semAvance.acquire();
-                }catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                posFinal=posMaxima;
             }
+            if(incrementos==0){
+                incrementos=1;
+            }
+
+            /*nueva posicion*/
+            pos++;
+            posMaxima++;
+            ConfigPos c4= new ConfigPos();
+            c4.setVector(v.clone());
+            c4.setAsignaciones(asignaciones);
+            c4.setColumnas(fijados);
+            c4.setComparaciones(comparaciones);
+            c4.setIncrementos(incrementos);
+            c4.setItAct(itActual);
+            c4.setItTotal(itTotales);
+            for(int x=0;x<v.length;x++){
+                c4.getFijado().add(x);
+            }
+            configPos.add(c4);
+            /*nueva posicion*/
+
+            try {
+                if (continuo) {
+                    Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
+                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                }
+                else {
+                    semAvance.acquire();
+                }
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            posFinal=posMaxima;
+            Sortrace.getPantalla().actualizarBotonesEjecucion();
         });
         th1.start();
     }
@@ -354,38 +377,39 @@ public class Shell implements Algoritmo {
     }
 
     @Override
-    public void avanzarContinuo() throws InterruptedException {
-        th2=new Thread(new Runnable() {//thread para realizar el algoritmo
-            @Override
-            public void run() {
-                int iteraciones = 0;
-                continuo=true;
-                while(pos<posMaxima) {//avanzamos hasta sincronizar con el programa
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        semContinuo.acquire();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+    public void avanzarContinuo() {
+        //thread para realizar el algoritmo
+        th2=new Thread(() -> {
+            int iteraciones = 0;
+            continuo=true;
+            while(pos<posMaxima) {//avanzamos hasta sincronizar con el programa
+                try {
+                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    semContinuo.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-                    pos++;
-                    Sortrace.getPantalla().mostrarPanelVisualizacion();
-                    Sortrace.getPantalla().añadirFotoSecuencia();
-                    for (int i = 0; i < v.length; i++) {
-                        //v[i] = posiciones.get(pos)[i];
-                        v[i] = configPos.get(pos).getVector()[i];
-                    }
-                    semContinuo.release();
-                }
+                pos++;
+                Sortrace.getPantalla().mostrarPanelVisualizacion();
+                Sortrace.getPantalla().añadirFotoSecuencia();
                 for (int i = 0; i < v.length; i++) {
-                    iteraciones = iteraciones + v.length - i+2;
+                    //v[i] = posiciones.get(pos)[i];
+                    v[i] = configPos.get(pos).getVector()[i];
                 }
-                semAvance.release(iteraciones+1);//liberamos hasta que termine
+                semContinuo.release();
             }
+            if(pos==posFinal){
+                Sortrace.getPantalla().actualizarBotonesEjecucion();
+            }
+            /*for (int i = 0; i < v.length; i++) {
+                iteraciones = iteraciones + v.length - i+2;
+            }*/
+            semAvance.release(1);//liberamos hasta que termine
         });
         th2.start();
     }
@@ -393,31 +417,30 @@ public class Shell implements Algoritmo {
     @Override
     public void retrocederContinuo() {
         continuo=true;
-        th2=new Thread(new Runnable() {//thread para realizar el algoritmo
-            @Override
-            public void run() {
-                while(pos>0){
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        semContinuo.acquire();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    pos--;
-                    Sortrace.getPantalla().mostrarPanelVisualizacion();
-                    Sortrace.getPantalla().añadirFotoSecuencia();
-                    for (int i = 0; i < v.length; i++) {
-                        //v[i] = posiciones.get(pos)[i];
-                        v[i] = configPos.get(pos).getVector()[i];
-                    }
-                    semContinuo.release();
+        //thread para realizar el algoritmo
+        th2=new Thread(() -> {
+            while(pos>0){
+                try {
+                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                try {
+                    semContinuo.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                pos--;
+                Sortrace.getPantalla().mostrarPanelVisualizacion();
+                Sortrace.getPantalla().añadirFotoSecuencia();
+                for (int i = 0; i < v.length; i++) {
+                    //v[i] = posiciones.get(pos)[i];
+                    v[i] = configPos.get(pos).getVector()[i];
+                }
+                semContinuo.release();
             }
+            Sortrace.getPantalla().actualizarBotonesEjecucion();
         });
         th2.start();
     }
@@ -436,35 +459,19 @@ public class Shell implements Algoritmo {
     }
     @Override
     public boolean esPosicionElementoComparado(int i){
-        if(configPos.get(pos).getComparado().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getComparado().contains(i);
     }
     @Override
     public boolean esPosicionIntercambiada(int i){
-        if(configPos.get(pos).getIntercambios().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getIntercambios().contains(i);
     }
     @Override
     public boolean noIntercambio(){
-        if(configPos.get(pos).getIntercambios().isEmpty()){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getIntercambios().isEmpty();
     }
     @Override
     public boolean esPosicionElementoFijado(int i){
-        if(configPos.get(pos).getFijado().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getFijado().contains(i);
     }
     @Override
     public int Comparaciones(){
@@ -506,11 +513,10 @@ public class Shell implements Algoritmo {
     }
 
     public int getItTotales() {
-        if(incrementos!=0) {
-            return v.length / incrementos;
-        }
-        else{
-            return 1;
-        }
+        return configPos.get(pos).itTotal;
+    }
+    @Override
+    public boolean IsContinuo() {
+        return continuo;
     }
 }

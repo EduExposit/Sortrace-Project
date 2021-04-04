@@ -37,7 +37,7 @@ public class BurbujaBasica implements Algoritmo {
 
     @Override
     public void ejecutar() {
-        Thread th1 =new Thread(new Runnable() {//thread para realizar el algoritmo
+         th1 =new Thread(new Runnable() {//thread para realizar el algoritmo
             @Override
             public void run() {//funciona pero falta sincronizar la posicion del thread con la que realmente estoy
                 int[]w=new int[v.length];
@@ -57,10 +57,10 @@ public class BurbujaBasica implements Algoritmo {
                     for (int j=w.length-1; j>=i; j--) {
                         ConfigPos c1=new ConfigPos();
                         try {
-                            if(continuo==true){
+                            if(continuo){
                                 Sortrace.getPantalla().mostrarPanelVisualizacion();
                                 Sortrace.getPantalla().añadirFotoSecuencia();
-                                sleep(1000);
+                                sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                             }
                             semAvance.acquire();
                         } catch (InterruptedException e) {
@@ -85,10 +85,10 @@ public class BurbujaBasica implements Algoritmo {
                         if (v[j-1]>v[j]) {
                             if(!avanzait) {
                                 try {
-                                    if(continuo==true){
+                                    if(continuo){
                                         Sortrace.getPantalla().mostrarPanelVisualizacion();
                                         Sortrace.getPantalla().añadirFotoSecuencia();
-                                        sleep(1000);
+                                        sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                                     }
                                     isAsing=true;
                                     semAvance.acquire();
@@ -123,10 +123,10 @@ public class BurbujaBasica implements Algoritmo {
                     }
                     avanzait=false;
                     try {
-                        if(continuo==true){
+                        if(continuo){
                             Sortrace.getPantalla().mostrarPanelVisualizacion();
                             Sortrace.getPantalla().añadirFotoSecuencia();
-                            sleep(1000);
+                            sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                         }
                         semAvance.acquire();
                     } catch (InterruptedException e) {
@@ -154,6 +154,16 @@ public class BurbujaBasica implements Algoritmo {
                 }
                 //Sortrace.getPantalla().mostrarPanelVisualizacion();
                 posFinal=posMaxima;
+                if(continuo){
+                    Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
+                    try {
+                        sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Sortrace.getPantalla().actualizarBotonesEjecucion();
             }
         });
         th1.start();
@@ -290,38 +300,39 @@ public class BurbujaBasica implements Algoritmo {
     }
 
     @Override
-    public void avanzarContinuo() throws InterruptedException {
-        th2=new Thread(new Runnable() {//thread para realizar el algoritmo
-            @Override
-            public void run() {
-                int iteraciones = 0;
-                continuo=true;
-                while(pos<posMaxima) {//avanzamos hasta sincronizar con el programa
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        semContinuo.acquire();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+    public void avanzarContinuo() {
+        //thread para realizar el algoritmo
+        th2=new Thread(() -> {
+            int iteraciones = 0;
+            continuo=true;
+            while(pos<posMaxima) {//avanzamos hasta sincronizar con el programa
+                try {
+                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    semContinuo.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-                    pos++;
-                    Sortrace.getPantalla().mostrarPanelVisualizacion();
-                    Sortrace.getPantalla().añadirFotoSecuencia();
-                    for (int i = 0; i < v.length; i++) {
-                        //v[i] = posiciones.get(pos)[i];
-                        v[i] = configPos.get(pos).getVector()[i];
-                    }
-                    semContinuo.release();
-                }
+                pos++;
+                Sortrace.getPantalla().mostrarPanelVisualizacion();
+                Sortrace.getPantalla().añadirFotoSecuencia();
                 for (int i = 0; i < v.length; i++) {
-                    iteraciones = iteraciones + v.length - i+2;
+                    //v[i] = posiciones.get(pos)[i];
+                    v[i] = configPos.get(pos).getVector()[i];
                 }
-                semAvance.release(iteraciones+1);//liberamos hasta que termine
+                semContinuo.release();
             }
+            if(pos==posFinal){
+                Sortrace.getPantalla().actualizarBotonesEjecucion();
+            }
+            for (int i = 0; i < v.length; i++) {
+                iteraciones = iteraciones + v.length - i+2;
+            }
+            semAvance.release(iteraciones+1);//liberamos hasta que termine
         });
         th2.start();
     }
@@ -329,31 +340,39 @@ public class BurbujaBasica implements Algoritmo {
     @Override
     public void retrocederContinuo() {
         continuo=true;
-        th2=new Thread(new Runnable() {//thread para realizar el algoritmo
-            @Override
-            public void run() {
-                while(pos>0){
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        semContinuo.acquire();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        //thread para realizar el algoritmo
+        th2=new Thread(() -> {
+            while(pos>0){
+                try {
+                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    semContinuo.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-                    pos--;
-                    Sortrace.getPantalla().mostrarPanelVisualizacion();
-                    Sortrace.getPantalla().añadirFotoSecuencia();
-                    for (int i = 0; i < v.length; i++) {
-                        //v[i] = posiciones.get(pos)[i];
-                        v[i] = configPos.get(pos).getVector()[i];
-                    }
-                    semContinuo.release();
+                pos--;
+                Sortrace.getPantalla().mostrarPanelVisualizacion();
+                Sortrace.getPantalla().añadirFotoSecuencia();
+                for (int i = 0; i < v.length; i++) {
+                    //v[i] = posiciones.get(pos)[i];
+                    v[i] = configPos.get(pos).getVector()[i];
+                }
+                semContinuo.release();
+            }
+            if(continuo){
+                Sortrace.getPantalla().mostrarPanelVisualizacion();
+                Sortrace.getPantalla().añadirFotoSecuencia();
+                try {
+                    sleep(Sortrace.getConfig().getVelocidadAnimacion()* 200L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
+            Sortrace.getPantalla().actualizarBotonesEjecucion();
         });
         th2.start();
     }
@@ -404,35 +423,19 @@ public class BurbujaBasica implements Algoritmo {
 
     @Override
     public boolean esPosicionElementoComparado(int i){
-        if(configPos.get(pos).getComparado().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getComparado().contains(i);
     }
     @Override
     public boolean esPosicionIntercambiada(int i){
-        if(configPos.get(pos).getIntercambios().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getIntercambios().contains(i);
     }
     @Override
     public boolean noIntercambio(){
-        if(configPos.get(pos).getIntercambios().isEmpty()){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getIntercambios().isEmpty();
     }
     @Override
     public boolean esPosicionElementoFijado(int i){
-        if(configPos.get(pos).getFijado().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getFijado().contains(i);
     }
     @Override
     public int Comparaciones(){
@@ -472,5 +475,9 @@ public class BurbujaBasica implements Algoritmo {
         semContinuo=new Semaphore(1);
         posIt=new ArrayList<>();
         configPos=new ArrayList<>();
+    }
+    @Override
+    public boolean IsContinuo() {
+        return continuo;
     }
 }

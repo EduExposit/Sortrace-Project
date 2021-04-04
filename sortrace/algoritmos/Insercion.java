@@ -36,14 +36,6 @@ public class Insercion implements Algoritmo {
         configPos=new ArrayList<>();
     }
 
-    public int getPivote() {
-        return pivote;
-    }
-
-    public void setPivote(int pivote) {
-        this.pivote = pivote;
-    }
-
     @Override
     public int[] getVector() {
         return v;
@@ -76,7 +68,7 @@ public class Insercion implements Algoritmo {
 
     @Override
     public void ejecutar() {
-        Thread th1 =new Thread(new Runnable() {//thread para realizar el algoritmo
+        th1 =new Thread(new Runnable() {//thread para realizar el algoritmo
             @Override
             public void run() {//funciona pero falta sincronizar la posicion del thread con la que realmente estoy
                 int[]w=new int[v.length];
@@ -106,10 +98,10 @@ public class Insercion implements Algoritmo {
                         ConfigPos c3=new ConfigPos();
 
                         try {
-                            if(continuo==true){
+                            if(continuo){
                                 Sortrace.getPantalla().mostrarPanelVisualizacion();
                                 Sortrace.getPantalla().añadirFotoSecuencia();
-                                sleep(1000);
+                                sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                             }
                             if(!avanzaIt) {
                                 semAvance.acquire();
@@ -122,7 +114,7 @@ public class Insercion implements Algoritmo {
 
                             asignaciones++;
                             c1.setVector(v.clone());
-                            c1.getIntercambios().add(j+1);
+                            c1.getIntercambios().add(0);
                             c1.setAsignaciones(asignaciones);
                             c1.setColumnas(fijados);
                             c1.setPivote(pivote);
@@ -132,10 +124,10 @@ public class Insercion implements Algoritmo {
                             posMaxima++;
                             markIt++;
                             try {
-                                if(continuo==true){
+                                if(continuo){
                                     Sortrace.getPantalla().mostrarPanelVisualizacion();
                                     Sortrace.getPantalla().añadirFotoSecuencia();
-                                    sleep(1000);
+                                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                                 }
                                 if(!avanzaIt) {
                                     semAvance.acquire();
@@ -174,10 +166,10 @@ public class Insercion implements Algoritmo {
                             posMaxima++;
                             markIt++;
                             try {
-                                if(continuo==true){
+                                if(continuo){
                                     Sortrace.getPantalla().mostrarPanelVisualizacion();
                                     Sortrace.getPantalla().añadirFotoSecuencia();
-                                    sleep(1000);
+                                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                                 }
                                 if(!avanzaIt) {
                                     semAvance.acquire();
@@ -203,10 +195,10 @@ public class Insercion implements Algoritmo {
                             markIt++;
 
                             try {
-                                if(continuo==true){
+                                if(continuo){
                                     Sortrace.getPantalla().mostrarPanelVisualizacion();
                                     Sortrace.getPantalla().añadirFotoSecuencia();
-                                    sleep(1000);
+                                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                                 }
                                 if(!avanzaIt) {
                                     semAvance.acquire();
@@ -246,10 +238,10 @@ public class Insercion implements Algoritmo {
                             posMaxima++;
                             markIt++;
                             try {
-                                if(continuo==true){
+                                if(continuo){
                                     Sortrace.getPantalla().mostrarPanelVisualizacion();
                                     Sortrace.getPantalla().añadirFotoSecuencia();
-                                    sleep(1000);
+                                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                                 }
                                 if(!avanzaIt) {
                                     semAvance.acquire();
@@ -274,12 +266,23 @@ public class Insercion implements Algoritmo {
                             c2.getComparado().add(j);
                             configPos.add(c2);
 
+
                             System.out.println("[" + w[0] + "," + w[1] + "," + w[2] + "," + w[3] + "," + w[4] + "," + w[5] + "," + w[6] + "," + w[7] + "]");
                         }
                     }
                     avanzaIt=false;
                 }
+                if(continuo){
+                    Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
+                    try {
+                        sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 posFinal=posMaxima;
+                Sortrace.getPantalla().actualizarBotonesEjecucion();
             }
         });
         th1.start();
@@ -402,38 +405,39 @@ public class Insercion implements Algoritmo {
     }
 
     @Override
-    public void avanzarContinuo() throws InterruptedException {
-        th2=new Thread(new Runnable() {//thread para realizar el algoritmo
-            @Override
-            public void run() {
-                int iteraciones = 0;
-                continuo=true;
-                while(pos<posMaxima) {//avanzamos hasta sincronizar con el programa
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        semContinuo.acquire();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+    public void avanzarContinuo() {
+        //thread para realizar el algoritmo
+        th2=new Thread(() -> {
+            int iteraciones = 0;
+            continuo=true;
+            while(pos<posMaxima) {//avanzamos hasta sincronizar con el programa
+                try {
+                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    semContinuo.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-                    pos++;
-                    Sortrace.getPantalla().mostrarPanelVisualizacion();
-                    Sortrace.getPantalla().añadirFotoSecuencia();
-                    for (int i = 0; i < v.length; i++) {
-                        //v[i] = posiciones.get(pos)[i];
-                        v[i] = configPos.get(pos).getVector()[i];
-                    }
-                    semContinuo.release();
-                }
+                pos++;
+                Sortrace.getPantalla().mostrarPanelVisualizacion();
+                Sortrace.getPantalla().añadirFotoSecuencia();
                 for (int i = 0; i < v.length; i++) {
-                    iteraciones = iteraciones + v.length - i+2;
+                    //v[i] = posiciones.get(pos)[i];
+                    v[i] = configPos.get(pos).getVector()[i];
                 }
-                semAvance.release(iteraciones+1);//liberamos hasta que termine
+                semContinuo.release();
             }
+            if(pos==posFinal){
+                Sortrace.getPantalla().actualizarBotonesEjecucion();
+            }
+            for (int i = 0; i < v.length; i++) {
+                iteraciones = iteraciones + v.length - i+2;
+            }
+            semAvance.release(iteraciones+1);//liberamos hasta que termine
         });
         th2.start();
     }
@@ -441,31 +445,30 @@ public class Insercion implements Algoritmo {
     @Override
     public void retrocederContinuo() {
         continuo=true;
-        th2=new Thread(new Runnable() {//thread para realizar el algoritmo
-            @Override
-            public void run() {
-                while(pos>0){
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        semContinuo.acquire();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    pos--;
-                    Sortrace.getPantalla().mostrarPanelVisualizacion();
-                    Sortrace.getPantalla().añadirFotoSecuencia();
-                    for (int i = 0; i < v.length; i++) {
-                        //v[i] = posiciones.get(pos)[i];
-                        v[i] = configPos.get(pos).getVector()[i];
-                    }
-                    semContinuo.release();
+        //thread para realizar el algoritmo
+        th2=new Thread(() -> {
+            while(pos>0){
+                try {
+                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                try {
+                    semContinuo.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                pos--;
+                Sortrace.getPantalla().mostrarPanelVisualizacion();
+                Sortrace.getPantalla().añadirFotoSecuencia();
+                for (int i = 0; i < v.length; i++) {
+                    //v[i] = posiciones.get(pos)[i];
+                    v[i] = configPos.get(pos).getVector()[i];
+                }
+                semContinuo.release();
             }
+            Sortrace.getPantalla().actualizarBotonesEjecucion();
         });
         th2.start();
     }
@@ -484,35 +487,19 @@ public class Insercion implements Algoritmo {
     }
     @Override
     public boolean esPosicionElementoComparado(int i){
-        if(configPos.get(pos).getComparado().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getComparado().contains(i);
     }
     @Override
     public boolean esPosicionIntercambiada(int i){
-        if(configPos.get(pos).getIntercambios().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getIntercambios().contains(i);
     }
     @Override
     public boolean noIntercambio(){
-        if(configPos.get(pos).getIntercambios().isEmpty()){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getIntercambios().isEmpty();
     }
     @Override
     public boolean esPosicionElementoFijado(int i){
-        if(configPos.get(pos).getFijado().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getFijado().contains(i);
     }
     @Override
     public int Comparaciones(){
@@ -557,5 +544,9 @@ public class Insercion implements Algoritmo {
 
     public int pivoteActual() {
         return this.configPos.get(pos).getPivote();
+    }
+    @Override
+    public boolean IsContinuo() {
+        return continuo;
     }
 }

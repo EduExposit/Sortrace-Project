@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class ConfigPos  {
     int[]vector;
+    int jAct,iAct,minAct; //variables para seleccion
+    int incrementos, itAct, itTotal; //variables para shell
     int asignaciones=0,comparaciones=0,columnas=0,pivote;
     ArrayList<Integer> comparados;
     ArrayList<Integer>fijados;
@@ -19,6 +21,54 @@ public class ConfigPos  {
         fijados=new ArrayList<>();
         intercambio=new ArrayList<>();
         comparados=new ArrayList<>();
+    }
+
+    public int getjAct() {
+        return jAct;
+    }
+
+    public void setjAct(int jAct) {
+        this.jAct = jAct;
+    }
+
+    public int getiAct() {
+        return iAct;
+    }
+
+    public void setiAct(int iAct) {
+        this.iAct = iAct;
+    }
+
+    public int getMinAct() {
+        return minAct;
+    }
+
+    public void setMinAct(int minAct) {
+        this.minAct = minAct;
+    }
+
+    public int getIncrementos() {
+        return incrementos;
+    }
+
+    public void setIncrementos(int incrementos) {
+        this.incrementos = incrementos;
+    }
+
+    public int getItAct() {
+        return itAct;
+    }
+
+    public void setItAct(int itAct) {
+        this.itAct = itAct;
+    }
+
+    public int getItTotal() {
+        return itTotal;
+    }
+
+    public void setItTotal(int itTotal) {
+        this.itTotal = itTotal;
     }
 
     public int[] getVector() {

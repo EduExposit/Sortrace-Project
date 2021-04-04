@@ -22,7 +22,9 @@ public class Seleccion implements Algoritmo {
     ArrayList<ConfigPos>configPos;
     Thread th2;
     Thread th1;
-
+    int iAct=0;
+    int jReal=0;
+    int minAct=0;
     public Seleccion(int[]v){
         this.v=v;
         pos = 0;
@@ -49,15 +51,6 @@ public class Seleccion implements Algoritmo {
         return continuo;
     }
 
-
-    public ArrayList<ConfigPos> getConfigPos() {
-        return configPos;
-    }
-
-    public void setConfigPos(ArrayList<ConfigPos> configPos) {
-        this.configPos = configPos;
-    }
-
     @Override
     public int getAsignaciones() {
         return asignaciones;
@@ -75,167 +68,179 @@ public class Seleccion implements Algoritmo {
 
     @Override
     public void ejecutar() {
-        th1 =new Thread(new Runnable() {//thread para realizar el algoritmo
-            @Override
-            public void run() {//funciona pero falta sincronizar la posicion del thread con la que realmente estoy
-                int[]w=new int[v.length];
-                for (int x=0; x<w.length;x++) {
-                    w[x]=v[x];
-                }
-                //posiciones.add(w.clone());
+        //thread para realizar el algoritmo
+        th1 =new Thread(() -> {//funciona pero falta sincronizar la posicion del thread con la que realmente estoy
+            int[]w=new int[v.length];
+            for (int x=0; x<w.length;x++) {
+                w[x]=v[x];
+            }
+            //posiciones.add(w.clone());
 
-                ConfigPos c=new ConfigPos();
-                c.setVector(w.clone());
-                c.setAsignaciones(0);
-                c.setColumnas(0);
-                c.setComparaciones(0);
-                configPos.add(c);
+            ConfigPos c=new ConfigPos();
+            c.setVector(w.clone());
+            c.setAsignaciones(0);
+            c.setColumnas(0);
+            c.setComparaciones(0);
+            c.setiAct(0);
+            c.setjAct(0);
+            c.setMinAct(0);
+            configPos.add(c);
 
-                int markIt=0;
-                posIt.add(markIt);
-                int min;
-                for (int i=0; i<v.length-1; i++) {
-                    sigIt++;
-                    min = i;
-                    for (int j=i+1; j<v.length; j++){
-                        ConfigPos c1=new ConfigPos();
-                        try {
-                            if(continuo==true){
-                                Sortrace.getPantalla().mostrarPanelVisualizacion();
-                                Sortrace.getPantalla().añadirFotoSecuencia();
-                                sleep(1000);
-                            }
-                            if(!avanzaIt) {
-                                semAvance.acquire();
-                            }
-                            //comparados.clear();
-                            //comparados.add(i);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        jAct++;
-                        markIt++;
-                        pos++;
-                        posMaxima++;
-                        //comparados.add(j);
-                        //comparados.add(min);
-                        //aqui cambiaria el axuliar que cuenta los pasos hasta la anterior iteracion
-                        comparaciones++;
-                        if (v[j]<v[min])
-                            min = j;
-
-                        //posiciones.add(v.clone());
-
-                        c1.setVector(v.clone());
-                        c1.getComparado().add(i);
-                        c1.getComparado().add(j);
-                        c1.getComparado().add(min);
-                        c1.setAsignaciones(asignaciones);
-                        c1.setColumnas(fijados);
-                        c1.setComparaciones(comparaciones);
-                        c1.setFijado((ArrayList<Integer>)configPos.get(configPos.size()-1).getFijado().clone());
-                        configPos.add(c1);
-                        //System.out.println("["+w[0]+","+w[1]+","+w[2]+","+w[3]+","+w[4]+","+w[5]+","+w[6]+","+w[7]+"]");
-                    }
-
+            int markIt=0;
+            posIt.add(markIt);
+            int min;
+            for (int i=0; i<v.length-1; i++) {
+                iAct=i;
+                sigIt++;
+                min = i;
+                minAct=min;
+                for (int j=i+1; j<v.length; j++){
+                    ConfigPos c1=new ConfigPos();
                     try {
-                        if(continuo==true){
+                        if(continuo){
                             Sortrace.getPantalla().mostrarPanelVisualizacion();
                             Sortrace.getPantalla().añadirFotoSecuencia();
-                            sleep(1000);
+                            sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                         }
                         if(!avanzaIt) {
                             semAvance.acquire();
                         }
-                        //comparados.clear();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    pos++;
+                    jReal=j;
+                    jAct++;
                     markIt++;
-                    posMaxima++;
-                    ConfigPos c2= new ConfigPos();
-                    c2.getIntercambios().add(min);
-                    c2.getIntercambios().add(i);
-                    c2.setVector(v.clone());
-                    c2.setAsignaciones(asignaciones);
-                    c2.setColumnas(fijados);
-                    c2.setComparaciones(comparaciones);
-                    c2.setFijado((ArrayList<Integer>)configPos.get(configPos.size()-1).getFijado().clone());
-                    configPos.add(c2);
-
-                    //intercambio.add(min);
-                    //intercambio.add(i);
-                    try {
-                        if(continuo==true){
-                            Sortrace.getPantalla().mostrarPanelVisualizacion();
-                            Sortrace.getPantalla().añadirFotoSecuencia();
-                            sleep(1000);
-                        }
-                        if(!avanzaIt) {
-                            semAvance.acquire();
-                        }
-                        //intercambio.clear();
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    asignaciones+=3;
-                    int aux = v[i];
-                    v[i]   = v[min];
-                    v[min] = aux;
                     pos++;
-                    markIt++;
                     posMaxima++;
-                    ConfigPos c3= new ConfigPos();
-                    for(int x=0;x<=i;x++) {
-                        c3.getFijado().add(x);
-                    }
-                    fijados++;
-                    c3.setVector(v.clone());
-                    c3.setAsignaciones(asignaciones);
-                    c3.setColumnas(fijados);
-                    c3.setComparaciones(comparaciones);
-                    configPos.add(c3);
-                    //fijados.add(i);
+                    //comparados.add(j);
+                    //comparados.add(min);
+                    //aqui cambiaria el axuliar que cuenta los pasos hasta la anterior iteracion
+                    comparaciones++;
+                    if (v[j]<v[min])
+                        min = j;
+                        minAct=min;
 
                     //posiciones.add(v.clone());
-                    jAct=0;
-                    posIt.add(markIt);
+
+                    c1.setVector(v.clone());
+                    c1.getComparado().add(i);
+                    c1.getComparado().add(j);
+                    c1.getComparado().add(min);
+                    c1.setiAct(i);
+                    c1.setjAct(j);
+                    c1.setMinAct(min);
+                    c1.setAsignaciones(asignaciones);
+                    c1.setColumnas(fijados);
+                    c1.setComparaciones(comparaciones);
+                    c1.setFijado((ArrayList<Integer>)configPos.get(configPos.size()-1).getFijado().clone());
+                    configPos.add(c1);
                     //System.out.println("["+w[0]+","+w[1]+","+w[2]+","+w[3]+","+w[4]+","+w[5]+","+w[6]+","+w[7]+"]");
-                    avanzaIt=false;
                 }
+
                 try {
-                    if(continuo==true){
+                    if(continuo){
                         Sortrace.getPantalla().mostrarPanelVisualizacion();
                         Sortrace.getPantalla().añadirFotoSecuencia();
-                        sleep(1000);
+                        sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                     }
-                    semAvance.acquire();//+1
+                    if(!avanzaIt) {
+                        semAvance.acquire();
+                    }
                     //comparados.clear();
-                    pos++;
-                    posMaxima++;
-                    markIt++;
-                    ConfigPos c4= new ConfigPos();
-                    for(int x=0;x<v.length;x++) {
-                        c4.getFijado().add(x);
-                    }
-                    c4.setVector(v.clone());
-                    c4.setAsignaciones(asignaciones);
-                    c4.setColumnas(fijados);
-                    c4.setComparaciones(comparaciones);
-                    configPos.add(c4);
-                    if(continuo==true) {
-                        Sortrace.getPantalla().mostrarPanelVisualizacion();
-                        Sortrace.getPantalla().añadirFotoSecuencia();
-                    }
-                    posIt.add(markIt);
-                    //fijados.add(v.length-1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                posFinal=posMaxima;
+                pos++;
+                markIt++;
+                posMaxima++;
+                ConfigPos c2= new ConfigPos();
+                c2.getIntercambios().add(min);
+                c2.getIntercambios().add(i);
+                c2.setVector(v.clone());
+                c2.setiAct(i);
+                c2.setjAct(jReal);
+                c2.setMinAct(min);
+                c2.setAsignaciones(asignaciones);
+                c2.setColumnas(fijados);
+                c2.setComparaciones(comparaciones);
+                c2.setFijado((ArrayList<Integer>)configPos.get(configPos.size()-1).getFijado().clone());
+                configPos.add(c2);
+
+                try {
+                    if(continuo){
+                        Sortrace.getPantalla().mostrarPanelVisualizacion();
+                        Sortrace.getPantalla().añadirFotoSecuencia();
+                        sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                    }
+                    if(!avanzaIt) {
+                        semAvance.acquire();
+                    }
+                    //intercambio.clear();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                asignaciones+=3;
+                int aux = v[i];
+                v[i]   = v[min];
+                v[min] = aux;
+                pos++;
+                markIt++;
+                posMaxima++;
+                ConfigPos c3= new ConfigPos();
+                for(int x=0;x<=i;x++) {
+                    c3.getFijado().add(x);
+                }
+                fijados++;
+                c3.setVector(v.clone());
+                c3.setAsignaciones(asignaciones);
+                c3.setColumnas(fijados);
+                c3.setComparaciones(comparaciones);
+                c3.setiAct(i);
+                c3.setjAct(jReal);
+                c3.setMinAct(min);
+                configPos.add(c3);
+
+                jAct=0;
+                posIt.add(markIt);
+                //System.out.println("["+w[0]+","+w[1]+","+w[2]+","+w[3]+","+w[4]+","+w[5]+","+w[6]+","+w[7]+"]");
+                avanzaIt=false;
             }
+            try {
+                if(continuo){
+                    Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
+                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                }
+                semAvance.acquire();//+1
+                //comparados.clear();
+                pos++;
+                posMaxima++;
+                markIt++;
+                ConfigPos c4= new ConfigPos();
+                for(int x=0;x<v.length;x++) {
+                    c4.getFijado().add(x);
+                }
+                c4.setVector(v.clone());
+                c4.setAsignaciones(asignaciones);
+                c4.setColumnas(fijados);
+                c4.setComparaciones(comparaciones);
+                c4.setiAct(iAct);
+                c4.setjAct(jReal);
+                c4.setMinAct(minAct);
+                configPos.add(c4);
+                if(continuo) {
+                    Sortrace.getPantalla().mostrarPanelVisualizacion();
+                    Sortrace.getPantalla().añadirFotoSecuencia();
+                }
+                posIt.add(markIt);
+                //fijados.add(v.length-1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            posFinal=posMaxima;
+            Sortrace.getPantalla().actualizarBotonesEjecucion();
         });
         th1.start();
     }
@@ -368,70 +373,70 @@ public class Seleccion implements Algoritmo {
     }
 
     @Override
-    public void avanzarContinuo() throws InterruptedException {
-        th2=new Thread(new Runnable() {//thread para realizar el algoritmo
-            @Override
-            public void run() {
-                int iteraciones = 0;
-                continuo=true;
-                while(pos<posMaxima) {//avanzamos hasta sincronizar con el programa
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        semContinuo.acquire();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    
-                    pos++;
-                    Sortrace.getPantalla().mostrarPanelVisualizacion();
-                    Sortrace.getPantalla().añadirFotoSecuencia();
-                    for (int i = 0; i < v.length; i++) {
-                        //v[i] = posiciones.get(pos)[i];
-                        v[i] = configPos.get(pos).getVector()[i];
-                    }
-                    semContinuo.release();
+    public void avanzarContinuo() {
+        //thread para realizar el algoritmo
+        th2=new Thread(() -> {
+            int iteraciones = 0;
+            continuo=true;
+            while(pos<posMaxima) {//avanzamos hasta sincronizar con el programa
+                try {
+                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                try {
+                    semContinuo.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                pos++;
+                Sortrace.getPantalla().mostrarPanelVisualizacion();
+                Sortrace.getPantalla().añadirFotoSecuencia();
                 for (int i = 0; i < v.length; i++) {
-                    iteraciones = iteraciones + v.length - i+2;
+                    //v[i] = posiciones.get(pos)[i];
+                    v[i] = configPos.get(pos).getVector()[i];
                 }
-                semAvance.release(iteraciones+1);//liberamos hasta que termine
+                semContinuo.release();
             }
+            if(pos==posFinal){
+                Sortrace.getPantalla().actualizarBotonesEjecucion();
+            }
+            for (int i = 0; i < v.length; i++) {
+                iteraciones = iteraciones + v.length - i+2;
+            }
+            semAvance.release(iteraciones+1);//liberamos hasta que termine
         });
         th2.start();
     }
 
     @Override
-    public void retrocederContinuo() throws InterruptedException {
+    public void retrocederContinuo() {
         continuo=true;
-        th2=new Thread(new Runnable() {//thread para realizar el algoritmo
-            @Override
-            public void run() {
-                while(pos>0){
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        semContinuo.acquire();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                   
-                    pos--;
-                    Sortrace.getPantalla().mostrarPanelVisualizacion();
-                    Sortrace.getPantalla().añadirFotoSecuencia();
-                    for (int i = 0; i < v.length; i++) {
-                        //v[i] = posiciones.get(pos)[i];
-                        v[i] = configPos.get(pos).getVector()[i];
-                    }
-                    semContinuo.release();
+        //thread para realizar el algoritmo
+        th2=new Thread(() -> {
+            while(pos>0){
+                try {
+                    sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                try {
+                    semContinuo.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                pos--;
+                Sortrace.getPantalla().mostrarPanelVisualizacion();
+                Sortrace.getPantalla().añadirFotoSecuencia();
+                for (int i = 0; i < v.length; i++) {
+                    //v[i] = posiciones.get(pos)[i];
+                    v[i] = configPos.get(pos).getVector()[i];
+                }
+                semContinuo.release();
             }
+            Sortrace.getPantalla().actualizarBotonesEjecucion();
         });
         th2.start();
     }
@@ -452,35 +457,19 @@ public class Seleccion implements Algoritmo {
 
     @Override
     public boolean esPosicionElementoComparado(int i){
-        if(configPos.get(pos).getComparado().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getComparado().contains(i);
     }
     @Override
     public boolean esPosicionIntercambiada(int i){
-        if(configPos.get(pos).getIntercambios().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getIntercambios().contains(i);
     }
     @Override
     public boolean noIntercambio(){
-        if(configPos.get(pos).getIntercambios().isEmpty()){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getIntercambios().isEmpty();
     }
     @Override
     public boolean esPosicionElementoFijado(int i){
-        if(configPos.get(pos).getFijado().contains(i)){
-            return true;
-        }else{
-            return false;
-        }
+        return configPos.get(pos).getFijado().contains(i);
     }
     @Override
     public int Comparaciones(){
@@ -522,4 +511,30 @@ public class Seleccion implements Algoritmo {
         configPos=new ArrayList<>();
     }
 
+    @Override
+    public boolean IsContinuo() {
+        return continuo;
+    }
+
+    public boolean esI(int x) {
+        return this.configPos.get(pos).getiAct()==x;
+    }
+    public boolean esJ(int x) {
+        return this.configPos.get(pos).getjAct()==x;
+    }
+    public boolean esMin(int x) {
+        return this.configPos.get(pos).getMinAct()==x;
+    }
+
+    public int getjAct() {
+        return this.configPos.get(pos).getjAct();
+    }
+
+    public int getiAct() {
+        return this.configPos.get(pos).getiAct();
+    }
+
+    public int getMinAct() {
+        return this.configPos.get(pos).getMinAct();
+    }
 }

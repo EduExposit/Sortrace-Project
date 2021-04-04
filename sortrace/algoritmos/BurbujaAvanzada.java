@@ -39,7 +39,7 @@ public class BurbujaAvanzada implements Algoritmo {
 
     @Override
     public void ejecutar() {
-        Thread th1 =new Thread(new Runnable() {//thread para realizar el algoritmo
+         th1 =new Thread(new Runnable() {//thread para realizar el algoritmo
             @Override
             public void run() {//funciona pero falta sincronizar la posicion del thread con la que realmente estoy
                 int[]w=new int[v.length];
@@ -62,10 +62,10 @@ public class BurbujaAvanzada implements Algoritmo {
                     for (int j=v.length-1; j>=i; j--) {
                         ConfigPos c1=new ConfigPos();
                         try {
-                            if(continuo==true){
+                            if(continuo){
                                 Sortrace.getPantalla().mostrarPanelVisualizacion();
                                 Sortrace.getPantalla().añadirFotoSecuencia();
-                                sleep(1000);
+                                sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                             }
                             semAvance.acquire();
                         } catch (InterruptedException e) {
@@ -90,10 +90,10 @@ public class BurbujaAvanzada implements Algoritmo {
                             ConfigPos c2=new ConfigPos();
                             if(!avanzait) {
                                 try {
-                                    if(continuo==true){
+                                    if(continuo){
                                         Sortrace.getPantalla().mostrarPanelVisualizacion();
                                         Sortrace.getPantalla().añadirFotoSecuencia();
-                                        sleep(1000);
+                                        sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                                     }
                                     isAsing=true;
                                     semAvance.acquire();
@@ -129,10 +129,10 @@ public class BurbujaAvanzada implements Algoritmo {
                     }
                     avanzait=false;
                     try {
-                        if(continuo==true){
+                        if(continuo){
                             Sortrace.getPantalla().mostrarPanelVisualizacion();
                             Sortrace.getPantalla().añadirFotoSecuencia();
-                            sleep(1000);
+                            sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                         }
                         semAvance.acquire();
                     } catch (InterruptedException e) {
@@ -143,7 +143,7 @@ public class BurbujaAvanzada implements Algoritmo {
                     markIt++;
                     fijados++;
                     ConfigPos c3= new ConfigPos();
-                    if(intercambio==true) {
+                    if(intercambio) {
                         for (int x = 0; x <= i; x++) {
                             c3.getFijado().add(x - 1);
                         }
@@ -166,7 +166,7 @@ public class BurbujaAvanzada implements Algoritmo {
                         c3.setColumnas(fijados);
                         c3.setComparaciones(comparaciones);
                         configPos.add(c3);
-                        if(continuo==true){
+                        if(continuo){
                             Sortrace.getPantalla().mostrarPanelVisualizacion();
                             Sortrace.getPantalla().añadirFotoSecuencia();
                         }
@@ -176,6 +176,7 @@ public class BurbujaAvanzada implements Algoritmo {
 
                 }
                 posFinal=posMaxima;
+                Sortrace.getPantalla().actualizarBotonesEjecucion();
             }
         });
         th1.start();
@@ -318,7 +319,7 @@ public class BurbujaAvanzada implements Algoritmo {
                 continuo=true;
                 while(pos<posMaxima) {//avanzamos hasta sincronizar con el programa
                     try {
-                        sleep(1000);
+                        sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -337,6 +338,9 @@ public class BurbujaAvanzada implements Algoritmo {
                     }
                     semContinuo.release();
                 }
+                if(pos==posFinal){
+                    Sortrace.getPantalla().actualizarBotonesEjecucion();
+                }
                 for (int i = 0; i < v.length; i++) {
                     iteraciones = iteraciones + v.length - i+2;
                 }
@@ -354,7 +358,7 @@ public class BurbujaAvanzada implements Algoritmo {
             public void run() {
                 while(pos>0){
                     try {
-                        sleep(1000);
+                        sleep(Math.abs(Sortrace.getConfig().getVelocidadAnimacion()-10)* 200L);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -373,6 +377,7 @@ public class BurbujaAvanzada implements Algoritmo {
                     }
                     semContinuo.release();
                 }
+                Sortrace.getPantalla().actualizarBotonesEjecucion();
             }
         });
         th2.start();
@@ -491,5 +496,9 @@ public class BurbujaAvanzada implements Algoritmo {
         semContinuo=new Semaphore(1);
         posIt=new ArrayList<>();
         configPos=new ArrayList<>();
+    }
+    @Override
+    public boolean IsContinuo() {
+        return continuo;
     }
 }
