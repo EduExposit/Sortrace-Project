@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<toc version="1.0"> <!--  categoryclosedimage="FolderClosed" categoryopenimage="FolderOpened"
+topicimage="ItemIco"-->
+    <tocitem text="Sortrace Help"    target="AyudaSortraceEn">
+        <tocitem text="Use Sortrace"    target="UsarSortraceEn">
+            <tocitem text="Select algorithms"    target="SeleccionarAlgoritmosEn"/>
+            <tocitem text="Load the data"    target="CargarDatosEn"/>
+            <tocitem text="Modify the data"    target="ModificarDatosEn"/>
+            <tocitem text="Run the algorithm"    target="EjecutarAlgoritmoEn"/>
+            <tocitem text="Keyboard shortcuts"    target="AtajosTecladoEn"/>
+        </tocitem>
+        <tocitem text="Interface"    target="InterfazEn">
+            <tocitem text="Icon bar"    target="BarraIconosEn"/>
+            <tocitem text="Theory and code panel"    target="PanelTeoriaEn"/>
+            <tocitem text="Display panel"    target="PanelVisualizacionEn"/>
+        </tocitem>
+        <tocitem text="Menu Options"    target="OpcionesMenuEn">
+            <tocitem text="File"    target="ArchivoEn"/>
+            <tocitem text="Execution"    target="EjecucionEn"/>
+            <tocitem text="Settings"    target="ConfiguracionEn"/>
+            <tocitem text="Help"    target="AyudaEn"/>
+        </tocitem>>
+    </tocitem>
+</toc>
