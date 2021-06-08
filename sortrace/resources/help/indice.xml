@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='ISO-8859-1'  ?>
+<!DOCTYPE index
+  PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/index_1_0.dtd">
+<index version="1.0">
+        <indexitem text="Ayuda Sortrace"    target="AyudaSortrace"/>
+        <indexitem text="Seleccionar algoritmos"    target="SeleccionarAlgoritmos"/>
+        <indexitem text="Cargar los datos"    target="CargarDatos"/>
+        <indexitem text="Modificar los datos"    target="ModificarDatos"/>
+        <indexitem text="Ejecutar el algoritmo"    target="EjecutarAlgoritmo"/>
+        <indexitem text="Atajos del teclado"    target="AtajosTeclado"/>
+        <indexitem text="Interfaz"    target="Interfaz"/>
+        <indexitem text="Barra de iconos"    target="BarraIconos"/>
+        <indexitem text="Panel de teoria y codigo"    target="PanelTeoria"/>
+        <indexitem text="Panel de visualizacion"    target="PanelVisualizacion"/>
+        <indexitem text="Opciones del Menu"    target="OpcionesMenu"/>
+        <indexitem text="Archivo"    target="Archivo"/>
+        <indexitem text="Ejecucion"    target="Ejecucion"/>
+        <indexitem text="Configuracion"    target="Configuracion"/>
+        <indexitem text="Ayuda"    target="Ayuda"/>
+</index>
