@@ -1,10 +1,12 @@
-package sortrace.algoritmos;
+package main.algoritmos;
 
 import java.util.ArrayList;
 
+import main.Sortrace;
+
 public class ConfigPos  {
     int[]vector;
-    int jAct,iAct,minAct; //variables para seleccion
+    int jAct,iAct,minAct,inc; //variables para seleccion
     int incrementos, itAct, itTotal; //variables para shell
     int asignaciones=0,comparaciones=0,columnas=0,pivote;
     ArrayList<Integer> comparados;
@@ -18,6 +20,9 @@ public class ConfigPos  {
     }
 
     public ConfigPos() {
+    	if(Sortrace.getVector().getVector()!=null) {
+    		this.vector=new int[Sortrace.getVector().getVector().length];
+    	}
         fijados=new ArrayList<>();
         intercambio=new ArrayList<>();
         comparados=new ArrayList<>();
@@ -134,4 +139,14 @@ public class ConfigPos  {
     public void setColumnas(int columnas) {
         this.columnas = columnas;
     }
+
+	public int getInc() {
+		return inc;
+	}
+
+	public void setInc(int inc) {
+		this.inc = inc;
+	}
+    
+    
 }
