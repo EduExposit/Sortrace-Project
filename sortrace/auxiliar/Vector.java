@@ -1,4 +1,4 @@
-package sortrace.auxiliar;
+package main.auxiliar;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
