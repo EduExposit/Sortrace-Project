@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE map
+        PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 2.0//EN"
+        "http://java.sun.com/products/javahelp/map_2_0.dtd">
+<map version="1.0">
+    <mapID target="AyudaSortraceEn" url="html/AyudaSortraceEn.html" />
+    <mapID target="UsarSortraceEn" url="html/UsarSortraceEn.html" />
+    <mapID target="InterfazEn" url="html/InterfazEn.html" />
+    <mapID target="OpcionesMenuEn" url="html/OpcionesMenuEn.html" />
+    <mapID target="SeleccionarAlgoritmosEn" url="html/SeleccionarAlgoritmoEn.html" />
+    <mapID target="CargarDatosEn" url="html/CargarDatosEn.html" />
+    <mapID target="ModificarDatosEn" url="html/ModificarDatosEn.html" />
+    <mapID target="EjecutarAlgoritmoEn" url="html/EjecutarAlgoritmoEn.html" />
+    <mapID target="AtajosTecladoEn" url="html/AtajosTecladoEn.html" />
+    <mapID target="BarraIconosEn" url="html/BarraIconosEn.html" />
+    <mapID target="PanelTeoriaEn" url="html/PanelTeoriaEn.html" />
+    <mapID target="PanelVisualizacionEn" url="html/PanelVisualizacionEn.html" />
+    <mapID target="ArchivoEn" url="html/ArchivoEn.html" />
+    <mapID target="EjecucionEn" url="html/EjecucionEn.html" />
+    <mapID target="ConfiguracionEn" url="html/ConfiguracionEn.html" />
+    <mapID target="AyudaEn" url="html/AyudaEn.html" />
+</map>
